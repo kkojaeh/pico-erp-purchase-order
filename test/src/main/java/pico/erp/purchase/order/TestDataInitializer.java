@@ -8,6 +8,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Profile;
+import pico.erp.purchase.order.item.PurchaseOrderItemRequests;
+import pico.erp.purchase.order.item.PurchaseOrderItemService;
 import pico.erp.shared.ApplicationInitializer;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
@@ -19,6 +21,10 @@ public class TestDataInitializer implements ApplicationInitializer {
   @Autowired
   private PurchaseOrderService purchaseOrderService;
 
+  @Lazy
+  @Autowired
+  private PurchaseOrderItemService purchaseOrderItemService;
+
 
   @Autowired
   private DataProperties dataProperties;
@@ -26,6 +32,7 @@ public class TestDataInitializer implements ApplicationInitializer {
   @Override
   public void initialize() {
     dataProperties.purchaseOrders.forEach(purchaseOrderService::create);
+    dataProperties.purchaseOrderItems.forEach(purchaseOrderItemService::create);
   }
 
   @Data
@@ -34,6 +41,8 @@ public class TestDataInitializer implements ApplicationInitializer {
   public static class DataProperties {
 
     List<PurchaseOrderRequests.CreateRequest> purchaseOrders = new LinkedList<>();
+
+    List<PurchaseOrderItemRequests.CreateRequest> purchaseOrderItems = new LinkedList<>();
 
   }
 
