@@ -198,7 +198,7 @@ class PurchaseOrderServiceSpec extends Specification {
     when:
     determineOrder()
     sendOrder()
-    
+
     receiveOrder()
     updateOrder()
     then:
@@ -337,7 +337,7 @@ class PurchaseOrderServiceSpec extends Specification {
     thrown(PurchaseOrderExceptions.CannotSendException)
   }
 
-  
+
   def "취소 - 취소 후에는 취소"() {
     when:
     cancelOrder()
@@ -368,7 +368,7 @@ class PurchaseOrderServiceSpec extends Specification {
     when:
     determineOrder()
     sendOrder()
-    
+
     cancelOrder()
     then:
     thrown(PurchaseOrderExceptions.CannotCancelException)
@@ -388,7 +388,7 @@ class PurchaseOrderServiceSpec extends Specification {
     when:
     determineOrder()
     sendOrder()
-    
+
     receiveOrder()
     cancelOrder()
     then:
@@ -445,7 +445,7 @@ class PurchaseOrderServiceSpec extends Specification {
     when:
     determineOrder()
     sendOrder()
-    
+
     receiveOrder()
     rejectOrder()
     then:

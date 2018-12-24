@@ -34,28 +34,28 @@ public enum PurchaseOrderStatusKind implements LocalizedNameable {
    */
   RECEIVED;
 
-  public boolean isUpdatable() {
-    return this == DRAFT;
+  public boolean isCancelable() {
+    return this == DRAFT || this == DETERMINED;
   }
 
   public boolean isDeterminable() {
     return this == DRAFT;
   }
 
-  public boolean isSendable() {
-    return this == DETERMINED;
-  }
-
-  public boolean isCancelable() {
-    return this == DRAFT || this == DETERMINED;
+  public boolean isReceivable() {
+    return this == SENT;
   }
 
   public boolean isRejectable() {
     return this == SENT;
   }
 
-  public boolean isReceivable() {
-    return this == SENT;
+  public boolean isSendable() {
+    return this == DETERMINED;
+  }
+
+  public boolean isUpdatable() {
+    return this == DRAFT;
   }
 
 

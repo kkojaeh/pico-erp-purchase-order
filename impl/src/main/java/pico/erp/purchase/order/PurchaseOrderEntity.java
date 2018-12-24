@@ -27,12 +27,9 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.company.CompanyId;
-import pico.erp.project.ProjectId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.location.site.SiteId;
-import pico.erp.warehouse.location.station.StationId;
 
 @Entity(name = "PurchaseOrder")
 @Table(name = "PCO_PURCHASE_ORDER")

@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
 import pico.erp.item.ItemData;
-import pico.erp.item.lot.ItemLotData;
 import pico.erp.item.spec.ItemSpecData;
 import pico.erp.project.ProjectData;
 import pico.erp.purchase.order.PurchaseOrder;

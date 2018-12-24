@@ -10,12 +10,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
-import pico.erp.project.ProjectId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.user.UserId;
-import pico.erp.warehouse.location.site.SiteId;
-import pico.erp.warehouse.location.station.StationId;
 
 public interface PurchaseOrderRequests {
 

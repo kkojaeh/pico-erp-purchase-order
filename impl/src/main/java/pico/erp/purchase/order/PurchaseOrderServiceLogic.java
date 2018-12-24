@@ -7,11 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.audit.AuditService;
-import pico.erp.purchase.order.PurchaseOrderRequests.DetermineRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.CancelRequest;
-import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
+import pico.erp.purchase.order.PurchaseOrderRequests.DetermineRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.ReceiveRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
+import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 
@@ -59,6 +59,16 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   }
 
   @Override
+  public void determine(DetermineRequest request) {
+    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+      .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
+    val response = purchaseRequest.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseRequest);
+    auditService.commit(purchaseRequest);
+    eventPublisher.publishEvents(response.getEvents());
+  }
+
+  @Override
   public boolean exists(PurchaseOrderId id) {
     return purchaseOrderRepository.exists(id);
   }
@@ -71,7 +81,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   }
 
   @Override
-  public void update(PurchaseOrderRequests.UpdateRequest request) {
+  public void receive(ReceiveRequest request) {
     val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
     val response = purchaseRequest.apply(mapper.map(request));
@@ -81,7 +91,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   }
 
   @Override
-  public void determine(DetermineRequest request) {
+  public void reject(RejectRequest request) {
     val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
     val response = purchaseRequest.apply(mapper.map(request));
@@ -101,17 +111,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   }
 
   @Override
-  public void receive(ReceiveRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
-      .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
-    eventPublisher.publishEvents(response.getEvents());
-  }
-
-  @Override
-  public void reject(RejectRequest request) {
+  public void update(PurchaseOrderRequests.UpdateRequest request) {
     val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
     val response = purchaseRequest.apply(mapper.map(request));

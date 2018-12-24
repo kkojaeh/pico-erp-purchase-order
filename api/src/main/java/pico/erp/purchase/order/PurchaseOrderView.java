@@ -9,10 +9,9 @@ import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
 import pico.erp.item.ItemId;
 import pico.erp.project.ProjectId;
+import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
 import pico.erp.user.UserId;
-import pico.erp.warehouse.location.site.SiteId;
-import pico.erp.warehouse.location.station.StationId;
 
 @Data
 public class PurchaseOrderView {
@@ -21,17 +20,13 @@ public class PurchaseOrderView {
 
   PurchaseOrderCode code;
 
-  Auditor requester;
+  Auditor charger;
 
-  Auditor accepter;
+  CompanyId supplierId;
 
-  ProjectId projectId;
+  CompanyId receiverId;
 
-  CompanyId receiveCompanyId;
-
-  SiteId receiveSiteId;
-
-  StationId receiveStationId;
+  Address receiveAddress;
 
   OffsetDateTime dueDate;
 

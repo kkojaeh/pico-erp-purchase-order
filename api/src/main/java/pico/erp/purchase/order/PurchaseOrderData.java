@@ -3,11 +3,8 @@ package pico.erp.purchase.order;
 import java.time.OffsetDateTime;
 import lombok.Data;
 import pico.erp.company.CompanyId;
-import pico.erp.project.ProjectId;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
-import pico.erp.warehouse.location.site.SiteId;
-import pico.erp.warehouse.location.station.StationId;
 
 @Data
 public class PurchaseOrderData {

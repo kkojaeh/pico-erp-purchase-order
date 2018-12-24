@@ -13,7 +13,6 @@ import pico.erp.purchase.order.PurchaseOrderId
 import pico.erp.purchase.order.PurchaseOrderRequests
 import pico.erp.purchase.order.PurchaseOrderService
 import pico.erp.shared.IntegrationConfiguration
-import pico.erp.user.UserId
 import spock.lang.Specification
 
 @SpringBootTest(classes = [IntegrationConfiguration])

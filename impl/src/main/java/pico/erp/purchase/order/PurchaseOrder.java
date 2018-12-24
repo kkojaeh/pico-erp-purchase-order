@@ -164,20 +164,20 @@ public class PurchaseOrder implements Serializable {
     return status.isCancelable();
   }
 
-  public boolean isReceivable() {
-    return status.isReceivable();
+  public boolean isDeterminable() {
+    return status.isDeterminable();
   }
 
-  public boolean isSendable() {
-    return status.isSendable();
+  public boolean isReceivable() {
+    return status.isReceivable();
   }
 
   public boolean isRejectable() {
     return status.isRejectable();
   }
 
-  public boolean isDeterminable() {
-    return status.isDeterminable();
+  public boolean isSendable() {
+    return status.isSendable();
   }
 
   public boolean isUpdatable() {

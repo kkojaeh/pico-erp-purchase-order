@@ -27,12 +27,6 @@ import pico.erp.shared.data.Auditor;
 import pico.erp.user.UserData;
 import pico.erp.user.UserId;
 import pico.erp.user.UserService;
-import pico.erp.warehouse.location.site.SiteData;
-import pico.erp.warehouse.location.site.SiteId;
-import pico.erp.warehouse.location.site.SiteService;
-import pico.erp.warehouse.location.station.StationData;
-import pico.erp.warehouse.location.station.StationId;
-import pico.erp.warehouse.location.station.StationService;
 
 @Mapper
 public abstract class PurchaseOrderMapper {
@@ -67,13 +61,11 @@ public abstract class PurchaseOrderMapper {
   @Autowired
   private ProjectService projectService;
 
-  @Lazy
-  @Autowired
-  private SiteService siteService;
-
-  @Lazy
-  @Autowired
-  private StationService stationService;
+  protected Auditor auditor(UserId userId) {
+    return Optional.ofNullable(userId)
+      .map(userService::getAuditor)
+      .orElse(null);
+  }
 
   @Mappings({
     @Mapping(target = "receiverId", source = "receiver.id"),
@@ -111,12 +103,6 @@ public abstract class PurchaseOrderMapper {
       .orElse(null);
   }
 
-  protected Auditor auditor(UserId userId) {
-    return Optional.ofNullable(userId)
-      .map(userService::getAuditor)
-      .orElse(null);
-  }
-
   protected CompanyData map(CompanyId companyId) {
     return Optional.ofNullable(companyId)
       .map(companyService::get)
@@ -146,18 +132,6 @@ public abstract class PurchaseOrderMapper {
   protected ItemSpecData map(ItemSpecId itemSpecId) {
     return Optional.ofNullable(itemSpecId)
       .map(itemSpecService::get)
-      .orElse(null);
-  }
-
-  protected StationData map(StationId stationId) {
-    return Optional.ofNullable(stationId)
-      .map(stationService::get)
-      .orElse(null);
-  }
-
-  protected SiteData map(SiteId siteId) {
-    return Optional.ofNullable(siteId)
-      .map(siteService::get)
       .orElse(null);
   }
 

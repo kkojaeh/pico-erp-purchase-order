@@ -9,13 +9,10 @@ import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.Value;
 import pico.erp.company.CompanyData;
-import pico.erp.project.ProjectData;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.Event;
-import pico.erp.warehouse.location.site.SiteData;
-import pico.erp.warehouse.location.station.StationData;
 
 public interface PurchaseOrderMessages {
 

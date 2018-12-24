@@ -20,7 +20,6 @@ import pico.erp.shared.SpringBootConfigs;
 import pico.erp.shared.data.Role;
 import pico.erp.shared.impl.ApplicationImpl;
 import pico.erp.user.UserApi;
-import pico.erp.warehouse.WarehouseApi;
 
 @Slf4j
 @SpringBootConfigs
@@ -60,8 +59,7 @@ public class PurchaseOrderApplication implements ApplicationStarter {
       UserApi.ID,
       ItemApi.ID,
       AuditApi.ID,
-      ProjectApi.ID,
-      WarehouseApi.ID
+      ProjectApi.ID
     ).collect(Collectors.toSet());
   }
 

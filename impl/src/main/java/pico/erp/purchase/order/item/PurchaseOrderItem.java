@@ -13,11 +13,8 @@ import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
 import pico.erp.item.ItemData;
-import pico.erp.item.lot.ItemLotData;
-import pico.erp.item.lot.ItemLotQuery;
 import pico.erp.item.spec.ItemSpecData;
 import pico.erp.project.ProjectData;
-import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrder;
 
 /**

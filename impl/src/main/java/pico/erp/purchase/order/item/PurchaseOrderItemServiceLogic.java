@@ -67,7 +67,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   }
 
 
-
   @Override
   public boolean exists(PurchaseOrderItemId id) {
     return planDetailRepository.exists(id);
