@@ -2,7 +2,4 @@ rootProject.name = 'pico-erp-purchase-order'
 include 'api'
 include 'impl'
 include 'test'
-include 'api'
-include 'impl'
-include 'test'
 

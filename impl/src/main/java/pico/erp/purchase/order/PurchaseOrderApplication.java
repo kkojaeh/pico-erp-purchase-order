@@ -77,20 +77,14 @@ public class PurchaseOrderApplication implements ApplicationStarter {
 
   @Bean
   @Public
-  public Role purchaseRequester() {
+  public Role purchaseOrderCharger() {
     return Roles.PURCHASE_ORDER_CHARGER;
   }
 
   @Bean
   @Public
-  public Role purchaseRequestManager() {
+  public Role purchaseOrderManager() {
     return Roles.PURCHASE_ORDER_MANAGER;
-  }
-
-  @Bean
-  @Public
-  public Role purchaseRequestAccepter() {
-    return Roles.PURCHASE_REQUEST_ACCEPTER;
   }
 
   @Override
