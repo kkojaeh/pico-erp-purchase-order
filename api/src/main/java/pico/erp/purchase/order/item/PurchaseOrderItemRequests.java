@@ -14,6 +14,7 @@ import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
 import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.UnitKind;
 
 public interface PurchaseOrderItemRequests {
 
@@ -46,6 +47,9 @@ public interface PurchaseOrderItemRequests {
     @NotNull
     @Min(0)
     BigDecimal unitCost;
+
+    @NotNull
+    UnitKind unit;
 
     @Size(max = TypeDefinitions.REMARK_LENGTH)
     String remark;

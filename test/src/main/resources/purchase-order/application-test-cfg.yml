@@ -36,6 +36,7 @@ data:
     item-id: material-paper-sc
     item-spec-id: material-paper-sc-spec-1
     quantity: 3000
+    unit: SHEET
     estimated-unit-cost: 300
     unit-cost: 280
     remark: 발주 비고
@@ -44,6 +45,7 @@ data:
     order-id: purchase-order-a
     item-id: material-cfb-sk.k-e
     quantity: 4000
+    unit: M2
     estimated-unit-cost: 275
     unit-cost: 269
     remark: 발주 비고
@@ -51,6 +53,7 @@ data:
   - id: purchase-order-b-1
     order-id: purchase-order-b
     item-id: material-paper-sc
+    unit: SHEET
     item-spec-id: material-paper-sc-spec-1
     quantity: 3000
     estimated-unit-cost: 300
@@ -61,6 +64,7 @@ data:
     order-id: purchase-order-b
     item-id: material-cfb-sk.k-e
     quantity: 4000
+    unit: M2
     estimated-unit-cost: 275
     unit-cost: 269
     remark: 발주 비고

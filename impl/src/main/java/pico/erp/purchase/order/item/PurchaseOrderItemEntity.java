@@ -11,6 +11,8 @@ import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -32,6 +34,7 @@ import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
+import pico.erp.shared.data.UnitKind;
 
 @Entity(name = "PurchaseOrderItem")
 @Table(name = "PCR_PURCHASE_REQUEST_ITEM", indexes = @Index(columnList = "REQUEST_ID"))
@@ -75,6 +78,16 @@ public class PurchaseOrderItemEntity implements Serializable {
 
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;
+
+  @Column(scale = 2)
+  BigDecimal estimatedUnitCost;
+
+  @Column(scale = 2)
+  BigDecimal unitCost;
+
+  @Column(length = TypeDefinitions.ENUM_LENGTH)
+  @Enumerated(EnumType.STRING)
+  UnitKind unit;
 
   @Column(length = TypeDefinitions.REMARK_LENGTH)
   String remark;

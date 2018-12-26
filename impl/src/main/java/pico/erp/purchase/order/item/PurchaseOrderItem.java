@@ -16,6 +16,7 @@ import pico.erp.item.ItemData;
 import pico.erp.item.spec.ItemSpecData;
 import pico.erp.project.ProjectData;
 import pico.erp.purchase.order.PurchaseOrder;
+import pico.erp.shared.data.UnitKind;
 
 /**
  * 주문 접수
@@ -46,6 +47,8 @@ public class PurchaseOrderItem implements Serializable {
 
   BigDecimal unitCost;
 
+  UnitKind unit;
+
   String remark;
 
   ProjectData project;
@@ -65,6 +68,7 @@ public class PurchaseOrderItem implements Serializable {
     this.item = request.getItem();
     this.itemSpec = request.getItemSpec();
     this.quantity = request.getQuantity();
+    this.unit = request.getUnit();
     this.estimatedUnitCost = request.getEstimatedUnitCost();
     this.unitCost = request.getUnitCost();
     this.remark = request.getRemark();

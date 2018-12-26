@@ -16,6 +16,7 @@ import pico.erp.item.spec.ItemSpecData;
 import pico.erp.project.ProjectData;
 import pico.erp.purchase.order.PurchaseOrder;
 import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.UnitKind;
 import pico.erp.shared.event.Event;
 
 public interface PurchaseOrderItemMessages {
@@ -50,6 +51,9 @@ public interface PurchaseOrderItemMessages {
       @Min(0)
       BigDecimal unitCost;
 
+      @NotNull
+      UnitKind unit;
+
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;
 
@@ -78,11 +82,11 @@ public interface PurchaseOrderItemMessages {
 
       @NotNull
       @Min(0)
-      BigDecimal unitCost;
+      BigDecimal quantity;
 
       @NotNull
       @Min(0)
-      BigDecimal quantity;
+      BigDecimal unitCost;
 
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;

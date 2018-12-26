@@ -9,6 +9,7 @@ import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.shared.data.UnitKind;
 
 @Builder
 @AllArgsConstructor
@@ -29,6 +30,8 @@ public class PurchaseOrderItemData {
   BigDecimal estimatedUnitCost;
 
   BigDecimal unitCost;
+
+  UnitKind unit;
 
   String remark;
 

@@ -13,6 +13,7 @@ import pico.erp.purchase.order.PurchaseOrderId
 import pico.erp.purchase.order.PurchaseOrderRequests
 import pico.erp.purchase.order.PurchaseOrderService
 import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.data.UnitKind
 import spock.lang.Specification
 
 @SpringBootTest(classes = [IntegrationConfiguration])
@@ -40,6 +41,8 @@ class PurchaseOrderItemServiceSpec extends Specification {
   def unitCost = 100
 
   def projectId = ProjectId.from("sample-project1")
+
+  def unit = UnitKind.EA
 
   def setup() {
 
@@ -94,6 +97,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
         orderId: orderId,
         itemId: itemId,
         quantity: 100,
+        unit: unit,
         unitCost: unitCost,
         remark: "품목 비고",
         projectId: projectId
@@ -108,6 +112,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
         orderId: orderId,
         itemId: itemId,
         quantity: 100,
+        unit: unit,
         unitCost: unitCost,
         remark: "품목 비고",
         projectId: projectId
@@ -162,6 +167,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
     item.orderId == orderId
     item.quantity == 100
     item.remark == "품목 비고"
+    item.unit == unit
 
   }
 

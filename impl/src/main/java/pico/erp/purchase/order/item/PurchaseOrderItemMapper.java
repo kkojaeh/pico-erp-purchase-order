@@ -78,7 +78,11 @@ public abstract class PurchaseOrderItemMapper {
       .item(map(entity.getItemId()))
       .itemSpec(map(entity.getItemSpecId()))
       .quantity(entity.getQuantity())
+      .estimatedUnitCost(entity.getEstimatedUnitCost())
+      .unitCost(entity.getUnitCost())
+      .unit(entity.getUnit())
       .remark(entity.getRemark())
+      .project(map(entity.getProjectId()))
       .build();
   }
 
