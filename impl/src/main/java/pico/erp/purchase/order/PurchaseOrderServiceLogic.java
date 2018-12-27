@@ -1,5 +1,8 @@
 package pico.erp.purchase.order;
 
+import java.time.OffsetDateTime;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -9,11 +12,18 @@ import org.springframework.validation.annotation.Validated;
 import pico.erp.audit.AuditService;
 import pico.erp.purchase.order.PurchaseOrderRequests.CancelRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.DetermineRequest;
+import pico.erp.purchase.order.PurchaseOrderRequests.GenerateRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.ReceiveRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
+import pico.erp.purchase.request.PurchaseRequestService;
+import pico.erp.purchase.request.PurchaseRequestStatusKind;
+import pico.erp.purchase.request.item.PurchaseRequestItemService;
 import pico.erp.shared.Public;
+import pico.erp.shared.TypeDefinitions;
+import pico.erp.shared.data.Address;
 import pico.erp.shared.event.EventPublisher;
+import pico.erp.warehouse.location.site.SiteService;
 
 @SuppressWarnings("Duplicates")
 @Service
@@ -35,24 +45,36 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   @Autowired
   private AuditService auditService;
 
+  @Lazy
+  @Autowired
+  private PurchaseRequestService purchaseRequestService;
+
+  @Lazy
+  @Autowired
+  private PurchaseRequestItemService purchaseRequestItemService;
+
+  @Lazy
+  @Autowired
+  private SiteService siteService;
+
   @Override
   public void cancel(CancelRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public PurchaseOrderData create(PurchaseOrderRequests.CreateRequest request) {
-    val purchaseRequest = new PurchaseOrder();
-    val response = purchaseRequest.apply(mapper.map(request));
-    if (purchaseOrderRepository.exists(purchaseRequest.getId())) {
+    val purchaseOrder = new PurchaseOrder();
+    val response = purchaseOrder.apply(mapper.map(request));
+    if (purchaseOrderRepository.exists(purchaseOrder.getId())) {
       throw new PurchaseOrderExceptions.AlreadyExistsException();
     }
-    val created = purchaseOrderRepository.create(purchaseRequest);
+    val created = purchaseOrderRepository.create(purchaseOrder);
     auditService.commit(created);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
@@ -60,11 +82,11 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
 
   @Override
   public void determine(DetermineRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -81,42 +103,99 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   }
 
   @Override
+  public PurchaseOrderData generate(GenerateRequest request) {
+    val purchaseRequestItems = request.getRequestItemIds().stream()
+      .map(purchaseRequestItemService::get)
+      .collect(Collectors.toList());
+    val purchaseRequests = purchaseRequestItems.stream()
+      .map(requestItem -> requestItem.getRequestId())
+      .map(purchaseRequestService::get)
+      .collect(Collectors.toList());
+    val locationEquals = purchaseRequests.stream()
+      .map(purchaseRequest -> "" + purchaseRequest.getReceiverId() + purchaseRequest
+        .getReceiveSiteId())
+      .distinct()
+      .limit(2)
+      .count() < 2;
+    val allAccepted = purchaseRequests.stream()
+      .allMatch(
+        purchaseRequest -> purchaseRequest.getStatus() == PurchaseRequestStatusKind.ACCEPTED);
+
+    if (!locationEquals || !allAccepted) {
+      throw new PurchaseOrderExceptions.CannotGenerateException();
+    }
+
+    val dueDate = purchaseRequests.stream()
+      .map(purchaseRequest -> purchaseRequest.getDueDate())
+      .min(Comparator.comparing(d -> d))
+      .orElseGet(() -> OffsetDateTime.now().plusDays(1));
+    val remark = purchaseRequests.stream()
+      .map(purchaseRequest -> purchaseRequest.getRemark())
+      .collect(Collectors.joining("\n"))
+      .substring(0, TypeDefinitions.REMARK_LENGTH);
+    val purchaseRequest = purchaseRequests.get(0);
+    val address = new Address();
+    if (purchaseRequest.getReceiveSiteId() != null) {
+      val siteAddress = siteService.get(purchaseRequest.getReceiveSiteId()).getAddress();
+      address.setPostalCode(siteAddress.getPostalCode());
+      address.setStreet(siteAddress.getStreet());
+      address.setDetail(siteAddress.getDetail());
+    }
+
+    val created = create(
+      PurchaseOrderRequests.CreateRequest.builder()
+        .id(request.getId())
+        .dueDate(dueDate)
+        .chargerId(request.getChargerId())
+        .receiveAddress(address)
+        .receiverId(purchaseRequest.getReceiverId())
+        .remark(remark)
+        .build()
+    );
+    eventPublisher.publishEvent(
+      new PurchaseOrderEvents.GeneratedEvent(created.getId(), request.getRequestItemIds())
+    );
+
+    return created;
+  }
+
+  @Override
   public void receive(ReceiveRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void reject(RejectRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void send(SendRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 
   @Override
   public void update(PurchaseOrderRequests.UpdateRequest request) {
-    val purchaseRequest = purchaseOrderRepository.findBy(request.getId())
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseRequest.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseRequest);
-    auditService.commit(purchaseRequest);
+    val response = purchaseOrder.apply(mapper.map(request));
+    purchaseOrderRepository.update(purchaseOrder);
+    auditService.commit(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
   }
 

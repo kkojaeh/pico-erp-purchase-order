@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 
 @Repository
 interface PurchaseOrderItemEntityRepository extends
@@ -17,6 +18,12 @@ interface PurchaseOrderItemEntityRepository extends
 
   @Query("SELECT i FROM PurchaseOrderItem i WHERE i.orderId = :orderId ORDER BY i.createdDate")
   Stream<PurchaseOrderItemEntity> findAllBy(@Param("orderId") PurchaseOrderId planId);
+
+  @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM PurchaseOrderItem i WHERE i.requestItemId = :requestItemId")
+  boolean exists(@Param("requestItemId") PurchaseRequestItemId requestItemId);
+
+  @Query("SELECT i FROM PurchaseOrderItem i WHERE i.requestItemId = :requestItemId")
+  PurchaseOrderItemEntity findBy(@Param("requestItemId") PurchaseRequestItemId requestItemId);
 
 }
 
@@ -48,6 +55,11 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   }
 
   @Override
+  public boolean exists(PurchaseRequestItemId requestItemId) {
+    return repository.exists(requestItemId);
+  }
+
+  @Override
   public Stream<PurchaseOrderItem> findAllBy(PurchaseOrderId planId) {
     return repository.findAllBy(planId)
       .map(mapper::jpa);
@@ -56,6 +68,12 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   @Override
   public Optional<PurchaseOrderItem> findBy(PurchaseOrderItemId id) {
     return Optional.ofNullable(repository.findOne(id))
+      .map(mapper::jpa);
+  }
+
+  @Override
+  public Optional<PurchaseOrderItem> findBy(PurchaseRequestItemId requestItemId) {
+    return Optional.ofNullable(repository.findBy(requestItemId))
       .map(mapper::jpa);
   }
 

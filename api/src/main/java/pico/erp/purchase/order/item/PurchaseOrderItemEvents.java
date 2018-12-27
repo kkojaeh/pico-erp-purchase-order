@@ -14,7 +14,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.created";
 
-    private PurchaseOrderItemId purchaseRequestItemId;
+    private PurchaseOrderItemId purchaseOrderItemId;
 
     public String channel() {
       return CHANNEL;
@@ -29,7 +29,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.updated";
 
-    private PurchaseOrderItemId purchaseRequestItemId;
+    private PurchaseOrderItemId purchaseOrderItemId;
 
     public String channel() {
       return CHANNEL;
@@ -44,7 +44,84 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.deleted";
 
-    private PurchaseOrderItemId purchaseRequestItemId;
+    private PurchaseOrderItemId purchaseOrderItemId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class ReceivedEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order-item.received";
+
+    private PurchaseOrderItemId purchaseOrderItemId;
+
+    private boolean completed;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class DeterminedEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order-item.determined";
+
+    private PurchaseOrderItemId purchaseOrderItemId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class CanceledEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order-item.canceled";
+
+    private PurchaseOrderItemId purchaseOrderItemId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class SentEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order-item.sent";
+
+    private PurchaseOrderItemId purchaseOrderItemId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class RejectedEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order-item.rejected";
+
+    private PurchaseOrderItemId purchaseOrderItemId;
 
     public String channel() {
       return CHANNEL;

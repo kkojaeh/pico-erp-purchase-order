@@ -1,6 +1,7 @@
 package pico.erp.purchase.order;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.user.UserId;
@@ -35,7 +37,6 @@ public interface PurchaseOrderRequests {
     CompanyId receiverId;
 
     @Valid
-    @NotNull
     CompanyId supplierId;
 
     @Valid
@@ -146,6 +147,26 @@ public interface PurchaseOrderRequests {
     @Valid
     @NotNull
     PurchaseOrderId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class GenerateRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderId id;
+
+    @Valid
+    @NotNull
+    UserId chargerId;
+
+    @Size(min = 1)
+    @NotNull
+    List<PurchaseRequestItemId> requestItemIds;
 
   }
 

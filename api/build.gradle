@@ -13,12 +13,12 @@ dependencies {
 
   compile("com.github.kkojaeh.pico-erp-item:api:${itemVersion}")
 
-  //compile("com.github.kkojaeh.pico-erp-comment:comment-api:${commentVersion}")
-
   compile("com.github.kkojaeh.pico-erp-audit:api:${auditVersion}")
 
   compile("com.github.kkojaeh.pico-erp-project:api:${projectVersion}")
 
-  //compile("com.github.kkojaeh.pico-erp-warehouse:api:${warehouseVersion}")
+  compile("com.github.kkojaeh.pico-erp-purchase-request:api:${purchaseRequestVersion}")
+
+  compile("com.github.kkojaeh.pico-erp-warehouse:api:${warehouseVersion}")
 
 }

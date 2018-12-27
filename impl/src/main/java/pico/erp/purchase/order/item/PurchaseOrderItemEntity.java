@@ -32,12 +32,16 @@ import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.data.UnitKind;
 
 @Entity(name = "PurchaseOrderItem")
-@Table(name = "PCR_PURCHASE_REQUEST_ITEM", indexes = @Index(columnList = "REQUEST_ID"))
+@Table(name = "PCO_PURCHASE_ORDER_ITEM", indexes = {
+  @Index(columnList = "ORDER_ID"),
+  @Index(columnList = "REQUEST_ITEM_ID")
+})
 @Data
 @EqualsAndHashCode(of = "id")
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -57,7 +61,7 @@ public class PurchaseOrderItemEntity implements Serializable {
   PurchaseOrderItemId id;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "ORDER_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
   PurchaseOrderId orderId;
 
@@ -79,6 +83,9 @@ public class PurchaseOrderItemEntity implements Serializable {
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;
 
+  @Column(precision = 19, scale = 2)
+  BigDecimal receivedQuantity;
+
   @Column(scale = 2)
   BigDecimal estimatedUnitCost;
 
@@ -91,6 +98,15 @@ public class PurchaseOrderItemEntity implements Serializable {
 
   @Column(length = TypeDefinitions.REMARK_LENGTH)
   String remark;
+
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  PurchaseRequestItemId requestItemId;
+
+  @Column(length = TypeDefinitions.ENUM_LENGTH)
+  @Enumerated(EnumType.STRING)
+  PurchaseOrderItemStatusKind status;
 
   @Embedded
   @AttributeOverrides({

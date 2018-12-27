@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import javax.validation.constraints.NotNull;
 import org.springframework.stereotype.Repository;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 
 @Repository
 public interface PurchaseOrderItemRepository {
@@ -15,9 +16,13 @@ public interface PurchaseOrderItemRepository {
 
   boolean exists(@NotNull PurchaseOrderItemId id);
 
+  boolean exists(@NotNull PurchaseRequestItemId requestItemId);
+
   Stream<PurchaseOrderItem> findAllBy(@NotNull PurchaseOrderId planId);
 
   Optional<PurchaseOrderItem> findBy(@NotNull PurchaseOrderItemId id);
+
+  Optional<PurchaseOrderItem> findBy(@NotNull PurchaseRequestItemId requestItemId);
 
   void update(@NotNull PurchaseOrderItem item);
 

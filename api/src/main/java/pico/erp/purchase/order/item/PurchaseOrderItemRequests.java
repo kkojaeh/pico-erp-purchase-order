@@ -1,6 +1,7 @@
 package pico.erp.purchase.order.item;
 
 import java.math.BigDecimal;
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.UnitKind;
 
@@ -42,14 +44,12 @@ public interface PurchaseOrderItemRequests {
     @Min(0)
     BigDecimal quantity;
 
-    BigDecimal estimatedUnitCost;
+    @NotNull
+    UnitKind unit;
 
     @NotNull
     @Min(0)
     BigDecimal unitCost;
-
-    @NotNull
-    UnitKind unit;
 
     @Size(max = TypeDefinitions.REMARK_LENGTH)
     String remark;
@@ -57,6 +57,9 @@ public interface PurchaseOrderItemRequests {
     @Valid
     @NotNull
     ProjectId projectId;
+
+    @Valid
+    PurchaseRequestItemId requestItemId;
 
   }
 
@@ -72,8 +75,6 @@ public interface PurchaseOrderItemRequests {
 
     @Valid
     ItemSpecId itemSpecId;
-
-    BigDecimal estimatedUnitCost;
 
     @NotNull
     @Min(0)
@@ -99,4 +100,84 @@ public interface PurchaseOrderItemRequests {
     PurchaseOrderItemId id;
 
   }
+
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class DetermineRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderItemId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class SendRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderItemId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class ReceiveRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderItemId id;
+
+    BigDecimal quantity;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class RejectRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderItemId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class CancelRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderItemId id;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class GenerateRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderId id;
+
+    @Size(min = 1)
+    @NotNull
+    List<PurchaseRequestItemId> requestItemIds;
+
+  }
+
 }

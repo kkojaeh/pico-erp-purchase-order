@@ -39,4 +39,17 @@ public class PurchaseOrderData {
 
   String remark;
 
+  boolean cancelable;
+
+  boolean determinable;
+
+  boolean receivable;
+
+  boolean rejectable;
+
+  boolean sendable;
+
+  boolean updatable;
+
+
 }

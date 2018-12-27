@@ -1,8 +1,10 @@
 package pico.erp.purchase.order;
 
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 import pico.erp.shared.event.Event;
 
 public interface PurchaseOrderEvents {
@@ -13,21 +15,6 @@ public interface PurchaseOrderEvents {
   class CreatedEvent implements Event {
 
     public final static String CHANNEL = "event.purchase-order.created";
-
-    private PurchaseOrderId purchaseOrderId;
-
-    public String channel() {
-      return CHANNEL;
-    }
-
-  }
-
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  class ProgressedEvent implements Event {
-
-    public final static String CHANNEL = "event.purchase-order.progressed";
 
     private PurchaseOrderId purchaseOrderId;
 
@@ -118,6 +105,23 @@ public interface PurchaseOrderEvents {
   class RejectedEvent implements Event {
 
     public final static String CHANNEL = "event.purchase-order.rejected";
+
+    private PurchaseOrderId purchaseOrderId;
+
+    public String channel() {
+      return CHANNEL;
+    }
+
+  }
+
+  @Data
+  @AllArgsConstructor
+  @NoArgsConstructor
+  class GeneratedEvent implements Event {
+
+    public final static String CHANNEL = "event.purchase-order.generated";
+
+    List<PurchaseRequestItemId> requestItemIds;
 
     private PurchaseOrderId purchaseOrderId;
 

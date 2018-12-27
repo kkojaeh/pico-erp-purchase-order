@@ -29,7 +29,6 @@ public interface PurchaseOrderMessages {
       @NotNull
       OffsetDateTime dueDate;
 
-      @NotNull
       CompanyData supplier;
 
       @NotNull

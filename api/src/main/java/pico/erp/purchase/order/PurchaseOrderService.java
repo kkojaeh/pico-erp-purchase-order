@@ -23,4 +23,6 @@ public interface PurchaseOrderService {
 
   void update(@Valid @NotNull PurchaseOrderRequests.UpdateRequest request);
 
+  PurchaseOrderData generate(@Valid @NotNull PurchaseOrderRequests.GenerateRequest request);
+
 }

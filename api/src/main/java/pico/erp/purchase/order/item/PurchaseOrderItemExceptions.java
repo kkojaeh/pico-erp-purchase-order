@@ -23,6 +23,12 @@ public interface PurchaseOrderItemExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "purchase-order-item.cannot.receive.exception")
+  class CannotReceiveException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "purchase-order-item.cannot.create.exception")
   class CannotCreateException extends RuntimeException {
 

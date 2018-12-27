@@ -9,6 +9,7 @@ import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
+import pico.erp.purchase.request.item.PurchaseRequestItemId;
 import pico.erp.shared.data.UnitKind;
 
 @Builder
@@ -36,5 +37,22 @@ public class PurchaseOrderItemData {
   String remark;
 
   ProjectId projectId;
+
+  PurchaseRequestItemId requestItemId;
+
+  PurchaseOrderItemStatusKind status;
+
+  boolean cancelable;
+
+  boolean determinable;
+
+  boolean receivable;
+
+  boolean rejectable;
+
+  boolean sendable;
+
+  boolean updatable;
+
 
 }

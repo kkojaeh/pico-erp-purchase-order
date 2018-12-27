@@ -15,6 +15,7 @@ import pico.erp.item.ItemData;
 import pico.erp.item.spec.ItemSpecData;
 import pico.erp.project.ProjectData;
 import pico.erp.purchase.order.PurchaseOrder;
+import pico.erp.purchase.request.item.PurchaseRequestItemData;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.UnitKind;
 import pico.erp.shared.event.Event;
@@ -45,20 +46,23 @@ public interface PurchaseOrderItemMessages {
       @Min(0)
       BigDecimal quantity;
 
-      BigDecimal estimatedUnitCost;
+      @NotNull
+      UnitKind unit;
 
       @NotNull
       @Min(0)
       BigDecimal unitCost;
-
-      @NotNull
-      UnitKind unit;
 
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;
 
       @NotNull
       ProjectData project;
+
+      PurchaseRequestItemData requestItem;
+
+      @NotNull
+      PurchaseOrderItemUnitCostEstimator unitCostEstimator;
 
     }
 
@@ -78,8 +82,6 @@ public interface PurchaseOrderItemMessages {
 
       ItemSpecData itemSpec;
 
-      BigDecimal estimatedUnitCost;
-
       @NotNull
       @Min(0)
       BigDecimal quantity;
@@ -90,6 +92,9 @@ public interface PurchaseOrderItemMessages {
 
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;
+
+      @NotNull
+      PurchaseOrderItemUnitCostEstimator unitCostEstimator;
 
     }
 
@@ -102,6 +107,87 @@ public interface PurchaseOrderItemMessages {
   }
 
   interface Delete {
+
+    @Data
+    class Request {
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+
+  }
+
+  interface Receive {
+
+    @Data
+    class Request {
+
+      BigDecimal quantity;
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+
+  }
+
+  interface Determine {
+
+    @Data
+    class Request {
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+  }
+
+
+  interface Send {
+
+    @Data
+    class Request {
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+  }
+
+  interface Reject {
+
+    @Data
+    class Request {
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+
+  }
+
+  interface Cancel {
 
     @Data
     class Request {
