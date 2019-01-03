@@ -31,6 +31,7 @@ public interface PurchaseOrderItemRequests {
     PurchaseOrderItemId id;
 
     @Valid
+    @NotNull
     PurchaseOrderId orderId;
 
     @Valid

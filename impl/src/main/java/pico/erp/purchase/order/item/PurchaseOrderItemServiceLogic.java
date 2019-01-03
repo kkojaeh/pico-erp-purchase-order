@@ -140,6 +140,7 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
 
         return PurchaseOrderItemRequests.CreateRequest.builder()
           .id(id)
+          .orderId(request.getId())
           .itemId(itemId)
           .itemSpecId(itemSpecId)
           .quantity(quantity)
