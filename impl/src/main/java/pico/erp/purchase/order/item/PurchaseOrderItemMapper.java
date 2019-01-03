@@ -97,6 +97,7 @@ public abstract class PurchaseOrderItemMapper {
       .remark(entity.getRemark())
       .project(map(entity.getProjectId()))
       .requestItem(map(entity.getRequestItemId()))
+      .status(entity.getStatus())
       .build();
   }
 

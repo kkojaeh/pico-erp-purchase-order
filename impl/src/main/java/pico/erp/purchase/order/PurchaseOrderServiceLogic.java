@@ -153,7 +153,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
         .build()
     );
     eventPublisher.publishEvent(
-      new PurchaseOrderEvents.GeneratedEvent(created.getId(), request.getRequestItemIds())
+      new PurchaseOrderEvents.GeneratedEvent(request.getRequestItemIds(), created.getId())
     );
 
     return created;
