@@ -154,7 +154,7 @@ class PurchaseOrderServiceSpec extends Specification {
     order.id == id
     order.receiverId == receiverId
     order.remark == remark
-    order.charger.id == chargerId.value
+    order.chargerId == chargerId
     order.dueDate == dueDate
     order.receiveAddress == receiveAddress
 
@@ -236,7 +236,7 @@ class PurchaseOrderServiceSpec extends Specification {
     order.receiveAddress == receiveAddress2
     order.dueDate == dueDate2
     order.remark == remark2
-    order.charger.id == chargerId.value
+    order.chargerId == chargerId
   }
 
   def "확정 - 작성 후 확정"() {

@@ -11,8 +11,8 @@ import lombok.Value;
 import pico.erp.company.CompanyData;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
-import pico.erp.shared.data.Auditor;
 import pico.erp.shared.event.Event;
+import pico.erp.user.UserData;
 
 public interface PurchaseOrderMessages {
 
@@ -41,7 +41,7 @@ public interface PurchaseOrderMessages {
       String remark;
 
       @NotNull
-      Auditor charger;
+      UserData charger;
 
       @NotNull
       PurchaseOrderCodeGenerator codeGenerator;
@@ -76,7 +76,7 @@ public interface PurchaseOrderMessages {
       Address receiveAddress;
 
       @NotNull
-      Auditor charger;
+      UserData charger;
 
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;

@@ -70,6 +70,7 @@ public abstract class PurchaseOrderMapper {
   @Mappings({
     @Mapping(target = "receiverId", source = "receiver.id"),
     @Mapping(target = "supplierId", source = "supplier.id"),
+    @Mapping(target = "chargerId", source = "charger.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
@@ -86,7 +87,7 @@ public abstract class PurchaseOrderMapper {
       .receiver(map(entity.getReceiverId()))
       .receiveAddress(entity.getReceiveAddress())
       .remark(entity.getRemark())
-      .charger(entity.getCharger())
+      .charger(map(entity.getChargerId()))
       .determinedDate(entity.getDeterminedDate())
       .receivedDate(entity.getReceivedDate())
       .sentDate(entity.getSentDate())
@@ -137,8 +138,8 @@ public abstract class PurchaseOrderMapper {
 
   @Mappings({
     @Mapping(target = "supplierId", source = "supplier.id"),
-    @Mapping(target = "receiverId", source = "receiver.id")
-
+    @Mapping(target = "receiverId", source = "receiver.id"),
+    @Mapping(target = "chargerId", source = "charger.id")
   })
   public abstract PurchaseOrderData map(PurchaseOrder purchaseOrder);
 

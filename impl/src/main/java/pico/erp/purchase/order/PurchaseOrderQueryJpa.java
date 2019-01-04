@@ -35,7 +35,7 @@ public class PurchaseOrderQueryJpa implements PurchaseOrderQuery {
     val select = Projections.bean(PurchaseOrderView.class,
       order.id,
       order.code,
-      order.charger,
+      order.chargerId,
       order.receiverId,
       order.supplierId,
       order.receiveAddress,
@@ -65,7 +65,7 @@ public class PurchaseOrderQueryJpa implements PurchaseOrderQuery {
     }
 
     if (filter.getChargerId() != null) {
-      builder.and(order.charger.id.eq(filter.getChargerId().getValue()));
+      builder.and(order.chargerId.eq(filter.getChargerId()));
     }
 
     if (filter.getProjectId() != null) {

@@ -4,7 +4,7 @@ import java.time.OffsetDateTime;
 import lombok.Data;
 import pico.erp.company.CompanyId;
 import pico.erp.shared.data.Address;
-import pico.erp.shared.data.Auditor;
+import pico.erp.user.UserId;
 
 @Data
 public class PurchaseOrderData {
@@ -13,7 +13,7 @@ public class PurchaseOrderData {
 
   PurchaseOrderCode code;
 
-  Auditor charger;
+  UserId chargerId;
 
   String rejectedReason;
 

@@ -15,7 +15,7 @@ import pico.erp.audit.annotation.Audit;
 import pico.erp.company.CompanyData;
 import pico.erp.purchase.order.PurchaseOrderEvents.DeterminedEvent;
 import pico.erp.shared.data.Address;
-import pico.erp.shared.data.Auditor;
+import pico.erp.user.UserData;
 
 /**
  * 주문 접수
@@ -46,7 +46,7 @@ public class PurchaseOrder implements Serializable {
 
   String remark;
 
-  Auditor charger;
+  UserData charger;
 
   OffsetDateTime determinedDate;
 

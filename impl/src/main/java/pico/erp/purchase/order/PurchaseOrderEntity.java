@@ -30,6 +30,7 @@ import pico.erp.company.CompanyId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
+import pico.erp.user.UserId;
 
 @Entity(name = "PurchaseOrder")
 @Table(name = "PCO_PURCHASE_ORDER")
@@ -82,12 +83,10 @@ public class PurchaseOrderEntity implements Serializable {
   @Column(length = TypeDefinitions.REMARK_LENGTH)
   String rejectedReason;
 
-  @Embedded
   @AttributeOverrides({
-    @AttributeOverride(name = "id", column = @Column(name = "CHARGER_ID", length = TypeDefinitions.ID_LENGTH)),
-    @AttributeOverride(name = "name", column = @Column(name = "CHARGER_BY_NAME", length = TypeDefinitions.NAME_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "CHARGER_ID", length = TypeDefinitions.ID_LENGTH))
   })
-  Auditor charger;
+  UserId chargerId;
 
   OffsetDateTime determinedDate;
 
