@@ -12,10 +12,18 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 import pico.erp.purchase.order.PurchaseOrderView.Filter;
 import pico.erp.purchase.order.item.QPurchaseOrderItemEntity;
+import pico.erp.shared.Public;
 import pico.erp.shared.jpa.QueryDslJpaSupport;
 
+@Service
+@Public
+@Transactional(readOnly = true)
+@Validated
 public class PurchaseOrderQueryJpa implements PurchaseOrderQuery {
 
 
