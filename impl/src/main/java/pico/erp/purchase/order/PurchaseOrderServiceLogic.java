@@ -2,6 +2,7 @@ package pico.erp.purchase.order;
 
 import java.time.OffsetDateTime;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -130,7 +131,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
       .min(Comparator.comparing(d -> d))
       .orElseGet(() -> OffsetDateTime.now().plusDays(1));
     val collectedRemark = purchaseRequests.stream()
-      .map(purchaseRequest -> purchaseRequest.getRemark())
+      .map(purchaseRequest -> Optional.ofNullable(purchaseRequest.getRemark()).orElse(""))
       .collect(Collectors.joining("\n"));
     val remark = collectedRemark
       .substring(0, Math.min(collectedRemark.length(), TypeDefinitions.REMARK_LENGTH));
