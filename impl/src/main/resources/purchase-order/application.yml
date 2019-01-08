@@ -90,6 +90,5 @@ flyway:
   enabled: false
 
 purchase-order:
-  detail-generation-policy:
-    start-time: "09:00"
-    end-time: "18:00"
+  print:
+    draft-template: classpath:purchase-order/template/draft.xlsx

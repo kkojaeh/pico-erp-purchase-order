@@ -58,5 +58,9 @@ public enum PurchaseOrderStatusKind implements LocalizedNameable {
     return this == DRAFT;
   }
 
+  public boolean isPrintable() {
+    return this == DETERMINED || this == SENT || this == RECEIVED;
+  }
+
 
 }

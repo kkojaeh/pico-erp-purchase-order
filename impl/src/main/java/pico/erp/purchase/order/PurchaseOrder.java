@@ -184,5 +184,9 @@ public class PurchaseOrder implements Serializable {
     return status.isUpdatable();
   }
 
+  public boolean isPrintable() {
+    return status.isPrintable();
+  }
+
 
 }

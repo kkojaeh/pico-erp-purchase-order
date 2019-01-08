@@ -170,4 +170,16 @@ public interface PurchaseOrderRequests {
 
   }
 
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
+  class PrintDraftRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderId id;
+
+  }
+
 }

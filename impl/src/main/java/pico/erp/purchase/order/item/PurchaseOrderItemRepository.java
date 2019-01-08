@@ -18,7 +18,7 @@ public interface PurchaseOrderItemRepository {
 
   boolean exists(@NotNull PurchaseRequestItemId requestItemId);
 
-  Stream<PurchaseOrderItem> findAllBy(@NotNull PurchaseOrderId planId);
+  Stream<PurchaseOrderItem> findAllBy(@NotNull PurchaseOrderId orderId);
 
   Optional<PurchaseOrderItem> findBy(@NotNull PurchaseOrderItemId id);
 

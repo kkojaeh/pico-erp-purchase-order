@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import pico.erp.audit.AuditService;
+import pico.erp.purchase.order.PurchaseOrderPrinter.DraftPrintOptions;
 import pico.erp.purchase.order.PurchaseOrderRequests.CancelRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.DetermineRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.GenerateRequest;
+import pico.erp.purchase.order.PurchaseOrderRequests.PrintDraftRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.ReceiveRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
@@ -23,6 +25,7 @@ import pico.erp.purchase.request.item.PurchaseRequestItemService;
 import pico.erp.shared.Public;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
+import pico.erp.shared.data.ContentInputStream;
 import pico.erp.shared.event.EventPublisher;
 import pico.erp.warehouse.location.site.SiteService;
 
@@ -57,6 +60,9 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   @Lazy
   @Autowired
   private SiteService siteService;
+
+  @Autowired
+  private PurchaseOrderPrinter printer;
 
   @Override
   public void cancel(CancelRequest request) {
@@ -159,6 +165,16 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
     );
 
     return created;
+  }
+
+  @Override
+  public ContentInputStream printDraft(PrintDraftRequest request) {
+    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
+      .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
+    if (!purchaseOrder.isPrintable()) {
+      throw new PurchaseOrderExceptions.CannotPrintException();
+    }
+    return printer.printDraft(request.getId(), new DraftPrintOptions());
   }
 
   @Override

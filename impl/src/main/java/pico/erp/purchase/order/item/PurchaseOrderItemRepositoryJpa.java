@@ -38,8 +38,8 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   private PurchaseOrderItemMapper mapper;
 
   @Override
-  public PurchaseOrderItem create(PurchaseOrderItem planItem) {
-    val entity = mapper.jpa(planItem);
+  public PurchaseOrderItem create(PurchaseOrderItem item) {
+    val entity = mapper.jpa(item);
     val created = repository.save(entity);
     return mapper.jpa(created);
   }
@@ -60,8 +60,8 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   }
 
   @Override
-  public Stream<PurchaseOrderItem> findAllBy(PurchaseOrderId planId) {
-    return repository.findAllBy(planId)
+  public Stream<PurchaseOrderItem> findAllBy(PurchaseOrderId orderId) {
+    return repository.findAllBy(orderId)
       .map(mapper::jpa);
   }
 

@@ -2,6 +2,7 @@ package pico.erp.purchase.order;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import pico.erp.shared.data.ContentInputStream;
 
 public interface PurchaseOrderService {
 
@@ -24,5 +25,7 @@ public interface PurchaseOrderService {
   void update(@Valid @NotNull PurchaseOrderRequests.UpdateRequest request);
 
   PurchaseOrderData generate(@Valid @NotNull PurchaseOrderRequests.GenerateRequest request);
+
+  ContentInputStream printDraft(@Valid @NotNull PurchaseOrderRequests.PrintDraftRequest request);
 
 }

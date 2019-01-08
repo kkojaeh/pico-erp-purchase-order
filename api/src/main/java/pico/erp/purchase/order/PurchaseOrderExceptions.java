@@ -53,6 +53,12 @@ public interface PurchaseOrderExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "purchase-order.cannot.print.exception")
+  class CannotPrintException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "purchase-order.not.found.exception")
   class NotFoundException extends RuntimeException {
 

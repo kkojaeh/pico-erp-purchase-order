@@ -161,6 +161,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
     when:
     createItem()
     def item = orderItemService.get(id)
+
     then:
     item.id == id
     item.itemId == itemId

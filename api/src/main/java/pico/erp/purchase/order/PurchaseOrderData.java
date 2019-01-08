@@ -51,5 +51,6 @@ public class PurchaseOrderData {
 
   boolean updatable;
 
+  boolean printable;
 
 }
