@@ -28,6 +28,8 @@ public class PurchaseOrderItemData {
 
   BigDecimal quantity;
 
+  BigDecimal receivedQuantity;
+
   BigDecimal estimatedUnitCost;
 
   BigDecimal unitCost;
