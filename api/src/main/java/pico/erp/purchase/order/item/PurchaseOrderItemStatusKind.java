@@ -48,7 +48,7 @@ public enum PurchaseOrderItemStatusKind implements LocalizedNameable {
   }
 
   public boolean isReceivable() {
-    return this == SENT;
+    return this == SENT || this == IN_RECEIVING;
   }
 
   public boolean isRejectable() {
