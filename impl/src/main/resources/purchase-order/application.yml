@@ -92,3 +92,6 @@ flyway:
 purchase-order:
   print:
     draft-template: classpath:purchase-order/template/draft.xlsx
+  charger-group:
+    id: purchase-request-charger
+    name: 발주 담당자
