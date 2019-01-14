@@ -13,6 +13,7 @@ import pico.erp.audit.AuditConfiguration;
 import pico.erp.item.ItemApi;
 import pico.erp.project.ProjectApi;
 import pico.erp.purchase.order.PurchaseOrderApi.Roles;
+import pico.erp.purchase.request.PurchaseRequestApi;
 import pico.erp.shared.ApplicationId;
 import pico.erp.shared.ApplicationStarter;
 import pico.erp.shared.Public;
@@ -20,6 +21,7 @@ import pico.erp.shared.SpringBootConfigs;
 import pico.erp.shared.data.Role;
 import pico.erp.shared.impl.ApplicationImpl;
 import pico.erp.user.UserApi;
+import pico.erp.warehouse.WarehouseApi;
 
 @Slf4j
 @SpringBootConfigs
@@ -59,7 +61,9 @@ public class PurchaseOrderApplication implements ApplicationStarter {
       UserApi.ID,
       ItemApi.ID,
       AuditApi.ID,
-      ProjectApi.ID
+      ProjectApi.ID,
+      PurchaseRequestApi.ID,
+      WarehouseApi.ID
     ).collect(Collectors.toSet());
   }
 
