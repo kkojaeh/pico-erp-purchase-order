@@ -23,7 +23,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import pico.erp.company.CompanyService;
-import pico.erp.company.address.CompanyAddressExceptions;
+import pico.erp.company.address.CompanyAddressData;
 import pico.erp.company.address.CompanyAddressService;
 import pico.erp.purchase.order.item.PurchaseOrderItemRepository;
 import pico.erp.shared.ExportHelper;
@@ -72,17 +72,17 @@ public class PurchaseOrderPrinterJxls implements PurchaseOrderPrinter {
     val ownerAddress = companyAddressService.getAll(owner.getId()).stream()
       .filter(c -> c.isRepresented())
       .findFirst()
-      .orElseThrow(CompanyAddressExceptions.CompanyAddressNotFoundException::new);
+      .orElse(new CompanyAddressData());
 
     val receiverAddress = companyAddressService.getAll(order.getReceiver().getId()).stream()
       .filter(c -> c.isRepresented())
       .findFirst()
-      .orElseThrow(CompanyAddressExceptions.CompanyAddressNotFoundException::new);
+      .orElse(new CompanyAddressData());
 
     val supplierAddress = companyAddressService.getAll(order.getSupplier().getId()).stream()
       .filter(c -> c.isRepresented())
       .findFirst()
-      .orElseThrow(CompanyAddressExceptions.CompanyAddressNotFoundException::new);
+      .orElse(new CompanyAddressData());
 
     Context context = new Context();
     context.putVar("owner", owner);
