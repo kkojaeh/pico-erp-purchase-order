@@ -118,6 +118,11 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
       .map(requestItem -> requestItem.getRequestId())
       .map(purchaseRequestService::get)
       .collect(Collectors.toList());
+    val supplierEquals = purchaseRequests.stream()
+      .map(purchaseRequest -> "" + purchaseRequest.getSupplierId())
+      .distinct()
+      .limit(2)
+      .count() < 2;
     val locationEquals = purchaseRequests.stream()
       .map(purchaseRequest -> "" + purchaseRequest.getReceiverId() + purchaseRequest
         .getReceiveSiteId())
@@ -128,7 +133,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
       .allMatch(
         purchaseRequest -> purchaseRequest.getStatus() == PurchaseRequestStatusKind.ACCEPTED);
 
-    if (!locationEquals || !allAccepted) {
+    if (!supplierEquals || !locationEquals || !allAccepted) {
       throw new PurchaseOrderExceptions.CannotGenerateException();
     }
 
@@ -136,6 +141,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
       .map(purchaseRequest -> purchaseRequest.getDueDate())
       .min(Comparator.comparing(d -> d))
       .orElseGet(() -> OffsetDateTime.now().plusDays(1));
+    val supplierId = purchaseRequests.stream().findAny().get().getSupplierId();
     val collectedRemark = purchaseRequests.stream()
       .map(purchaseRequest -> Optional.ofNullable(purchaseRequest.getRemark()).orElse(""))
       .collect(Collectors.joining("\n"));
@@ -155,6 +161,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
         .id(request.getId())
         .dueDate(dueDate)
         .chargerId(request.getChargerId())
+        .supplierId(supplierId)
         .receiveAddress(address)
         .receiverId(purchaseRequest.getReceiverId())
         .remark(remark)
