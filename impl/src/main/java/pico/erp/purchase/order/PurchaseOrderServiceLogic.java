@@ -21,7 +21,6 @@ import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
 import pico.erp.purchase.request.PurchaseRequestService;
 import pico.erp.purchase.request.PurchaseRequestStatusKind;
-import pico.erp.purchase.request.item.PurchaseRequestItemService;
 import pico.erp.shared.Public;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
@@ -52,10 +51,6 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   @Lazy
   @Autowired
   private PurchaseRequestService purchaseRequestService;
-
-  @Lazy
-  @Autowired
-  private PurchaseRequestItemService purchaseRequestItemService;
 
   @Lazy
   @Autowired
@@ -111,11 +106,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
 
   @Override
   public PurchaseOrderData generate(GenerateRequest request) {
-    val purchaseRequestItems = request.getRequestItemIds().stream()
-      .map(purchaseRequestItemService::get)
-      .collect(Collectors.toList());
-    val purchaseRequests = purchaseRequestItems.stream()
-      .map(requestItem -> requestItem.getRequestId())
+    val purchaseRequests = request.getRequestIds().stream()
       .map(purchaseRequestService::get)
       .collect(Collectors.toList());
     val supplierEquals = purchaseRequests.stream()
@@ -168,7 +159,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
         .build()
     );
     eventPublisher.publishEvent(
-      new PurchaseOrderEvents.GeneratedEvent(request.getRequestItemIds(), created.getId())
+      new PurchaseOrderEvents.GeneratedEvent(request.getRequestIds(), created.getId())
     );
 
     return created;

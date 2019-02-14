@@ -11,11 +11,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Value;
-import pico.erp.item.ItemData;
-import pico.erp.item.spec.ItemSpecData;
-import pico.erp.project.ProjectData;
+import pico.erp.item.ItemId;
+import pico.erp.item.spec.ItemSpecCode;
+import pico.erp.item.spec.ItemSpecId;
+import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrder;
-import pico.erp.purchase.request.item.PurchaseRequestItemData;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.UnitKind;
 import pico.erp.shared.event.Event;
@@ -37,10 +38,16 @@ public interface PurchaseOrderItemMessages {
       @NotNull
       PurchaseOrder order;
 
+      @Valid
       @NotNull
-      ItemData item;
+      ItemId itemId;
 
-      ItemSpecData itemSpec;
+      @Valid
+      ItemSpecId itemSpecId;
+
+      @Valid
+      @NotNull
+      ItemSpecCode itemSpecCode;
 
       @NotNull
       @Min(0)
@@ -57,9 +64,9 @@ public interface PurchaseOrderItemMessages {
       String remark;
 
       @NotNull
-      ProjectData project;
+      ProjectId projectId;
 
-      PurchaseRequestItemData requestItem;
+      PurchaseRequestId requestId;
 
       @NotNull
       PurchaseOrderItemUnitCostEstimator unitCostEstimator;
@@ -80,7 +87,12 @@ public interface PurchaseOrderItemMessages {
     @Data
     class Request {
 
-      ItemSpecData itemSpec;
+      @Valid
+      ItemSpecId itemSpecId;
+
+      @Valid
+      @NotNull
+      ItemSpecCode itemSpecCode;
 
       @NotNull
       @Min(0)

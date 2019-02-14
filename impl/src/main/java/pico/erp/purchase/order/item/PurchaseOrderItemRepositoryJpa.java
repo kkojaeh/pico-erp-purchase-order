@@ -10,20 +10,20 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pico.erp.purchase.order.PurchaseOrderId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 
 @Repository
 interface PurchaseOrderItemEntityRepository extends
   CrudRepository<PurchaseOrderItemEntity, PurchaseOrderItemId> {
 
+  @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM PurchaseOrderItem i WHERE i.requestId = :requestId")
+  boolean exists(@Param("requestId") PurchaseRequestId requestId);
+
   @Query("SELECT i FROM PurchaseOrderItem i WHERE i.orderId = :orderId ORDER BY i.createdDate")
-  Stream<PurchaseOrderItemEntity> findAllBy(@Param("orderId") PurchaseOrderId planId);
+  Stream<PurchaseOrderItemEntity> findAllBy(@Param("orderId") PurchaseOrderId orderId);
 
-  @Query("SELECT CASE WHEN COUNT(i) > 0 THEN true ELSE false END FROM PurchaseOrderItem i WHERE i.requestItemId = :requestItemId")
-  boolean exists(@Param("requestItemId") PurchaseRequestItemId requestItemId);
-
-  @Query("SELECT i FROM PurchaseOrderItem i WHERE i.requestItemId = :requestItemId")
-  PurchaseOrderItemEntity findBy(@Param("requestItemId") PurchaseRequestItemId requestItemId);
+  @Query("SELECT i FROM PurchaseOrderItem i WHERE i.requestId = :requestId")
+  PurchaseOrderItemEntity findBy(@Param("requestId") PurchaseRequestId requestId);
 
 }
 
@@ -55,8 +55,8 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   }
 
   @Override
-  public boolean exists(PurchaseRequestItemId requestItemId) {
-    return repository.exists(requestItemId);
+  public boolean exists(PurchaseRequestId requestId) {
+    return repository.exists(requestId);
   }
 
   @Override
@@ -72,8 +72,8 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
   }
 
   @Override
-  public Optional<PurchaseOrderItem> findBy(PurchaseRequestItemId requestItemId) {
-    return Optional.ofNullable(repository.findBy(requestItemId))
+  public Optional<PurchaseOrderItem> findBy(PurchaseRequestId requestId) {
+    return Optional.ofNullable(repository.findBy(requestId))
       .map(mapper::jpa);
   }
 

@@ -11,7 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.user.UserId;
@@ -166,7 +166,7 @@ public interface PurchaseOrderRequests {
 
     @Size(min = 1)
     @NotNull
-    List<PurchaseRequestItemId> requestItemIds;
+    List<PurchaseRequestId> requestIds;
 
   }
 

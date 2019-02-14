@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.event.Event;
 
 public interface PurchaseOrderEvents {
@@ -16,7 +16,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.created";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -31,7 +31,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.determined";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -46,7 +46,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.updated";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -61,7 +61,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.canceled";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -76,7 +76,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.received";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -91,7 +91,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.sent";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -106,7 +106,7 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.rejected";
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;
@@ -121,9 +121,9 @@ public interface PurchaseOrderEvents {
 
     public final static String CHANNEL = "event.purchase-order.generated";
 
-    List<PurchaseRequestItemId> requestItemIds;
+    List<PurchaseRequestId> requestIds;
 
-    private PurchaseOrderId purchaseOrderId;
+    private PurchaseOrderId id;
 
     public String channel() {
       return CHANNEL;

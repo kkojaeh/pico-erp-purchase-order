@@ -4,7 +4,7 @@ import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import pico.erp.purchase.order.PurchaseOrderId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 
 public interface PurchaseOrderItemService {
 
@@ -21,13 +21,13 @@ public interface PurchaseOrderItemService {
 
   void determine(@Valid @NotNull PurchaseOrderItemRequests.DetermineRequest request);
 
-  boolean exists(@Valid @NotNull PurchaseRequestItemId requestItemId);
+  boolean exists(@Valid @NotNull PurchaseRequestId requestId);
 
   void update(@Valid @NotNull PurchaseOrderItemRequests.UpdateRequest request);
 
   void generate(@Valid @NotNull PurchaseOrderItemRequests.GenerateRequest request);
 
-  PurchaseOrderItemData get(@Valid @NotNull PurchaseRequestItemId requestItemId);
+  PurchaseOrderItemData get(@Valid @NotNull PurchaseRequestId requestId);
 
   List<PurchaseOrderItemData> getAll(@Valid @NotNull PurchaseOrderId orderId);
 

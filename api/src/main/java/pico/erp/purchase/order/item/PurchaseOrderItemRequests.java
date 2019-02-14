@@ -11,10 +11,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.item.ItemId;
+import pico.erp.item.spec.ItemSpecCode;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.UnitKind;
 
@@ -41,6 +42,10 @@ public interface PurchaseOrderItemRequests {
     @Valid
     ItemSpecId itemSpecId;
 
+    @Valid
+    @NotNull
+    ItemSpecCode itemSpecCode;
+
     @NotNull
     @Min(0)
     BigDecimal quantity;
@@ -60,7 +65,7 @@ public interface PurchaseOrderItemRequests {
     ProjectId projectId;
 
     @Valid
-    PurchaseRequestItemId requestItemId;
+    PurchaseRequestId requestId;
 
   }
 
@@ -76,6 +81,10 @@ public interface PurchaseOrderItemRequests {
 
     @Valid
     ItemSpecId itemSpecId;
+
+    @Valid
+    @NotNull
+    ItemSpecCode itemSpecCode;
 
     @NotNull
     @Min(0)
@@ -177,7 +186,7 @@ public interface PurchaseOrderItemRequests {
 
     @Size(min = 1)
     @NotNull
-    List<PurchaseRequestItemId> requestItemIds;
+    List<PurchaseRequestId> requestIds;
 
   }
 

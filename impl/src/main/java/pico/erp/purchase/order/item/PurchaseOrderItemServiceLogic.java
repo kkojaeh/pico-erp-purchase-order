@@ -15,9 +15,8 @@ import pico.erp.item.spec.ItemSpecRequests;
 import pico.erp.item.spec.ItemSpecService;
 import pico.erp.purchase.order.PurchaseOrderId;
 import pico.erp.purchase.order.item.PurchaseOrderItemRequests.GenerateRequest;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.purchase.request.PurchaseRequestService;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
-import pico.erp.purchase.request.item.PurchaseRequestItemService;
 import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 
@@ -40,10 +39,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   @Lazy
   @Autowired
   private AuditService auditService;
-
-  @Lazy
-  @Autowired
-  private PurchaseRequestItemService purchaseRequestItemService;
 
   @Lazy
   @Autowired
@@ -106,36 +101,36 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   }
 
   @Override
-  public boolean exists(PurchaseRequestItemId requestItemId) {
-    return purchaseOrderItemRepository.exists(requestItemId);
+  public boolean exists(PurchaseRequestId requestId) {
+    return purchaseOrderItemRepository.exists(requestId);
   }
 
   @Override
   public void generate(GenerateRequest request) {
-    request.getRequestItemIds().stream()
-      .map(purchaseRequestItemService::get)
-      .map(purchaseRequestItem -> {
-        val purchaseRequest = purchaseRequestService.get(purchaseRequestItem.getRequestId());
+    request.getRequestIds().stream()
+      .map(purchaseRequestService::get)
+      .map(purchaseRequest -> {
         val id = PurchaseOrderItemId.generate();
-        val itemId = purchaseRequestItem.getItemId();
+        val itemId = purchaseRequest.getItemId();
         val item = itemService.get(itemId);
-        val itemSpecId = purchaseRequestItem.getItemSpecId();
+        val itemSpecId = purchaseRequest.getItemSpecId();
+        val itemSpecCode = purchaseRequest.getItemSpecCode();
         val itemSpec = Optional.ofNullable(itemSpecId)
           .map(itemSpecService::get)
           .orElse(null);
         val quantity = Optional.ofNullable(itemSpec)
           .map(spec -> itemSpecService.calculate(
             new ItemSpecRequests.CalculatePurchaseQuantityRequest(spec.getId(),
-              purchaseRequestItem.getQuantity())
+              purchaseRequest.getQuantity())
           ))
-          .orElse(purchaseRequestItem.getQuantity());
+          .orElse(purchaseRequest.getQuantity());
         val unit = Optional.ofNullable(itemSpec)
           .map(spec -> spec.getPurchaseUnit())
           .orElse(item.getUnit());
         val unitCost = Optional.ofNullable(itemSpec)
           .map(spec -> spec.getPurchaseUnitCost())
           .orElse(item.getBaseUnitCost());
-        val remark = purchaseRequestItem.getRemark();
+        val remark = purchaseRequest.getRemark();
         val projectId = purchaseRequest.getProjectId();
 
         return PurchaseOrderItemRequests.CreateRequest.builder()
@@ -143,12 +138,13 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
           .orderId(request.getId())
           .itemId(itemId)
           .itemSpecId(itemSpecId)
+          .itemSpecCode(itemSpecCode)
           .quantity(quantity)
           .unit(unit)
           .unitCost(unitCost)
           .remark(remark)
           .projectId(projectId)
-          .requestItemId(purchaseRequestItem.getId())
+          .requestId(purchaseRequest.getId())
           .build();
 
       })
@@ -163,8 +159,8 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   }
 
   @Override
-  public PurchaseOrderItemData get(PurchaseRequestItemId requestItemId) {
-    return purchaseOrderItemRepository.findBy(requestItemId)
+  public PurchaseOrderItemData get(PurchaseRequestId requestId) {
+    return purchaseOrderItemRepository.findBy(requestId)
       .map(mapper::map)
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
   }

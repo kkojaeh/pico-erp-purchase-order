@@ -24,9 +24,6 @@ import pico.erp.purchase.order.PurchaseOrder;
 import pico.erp.purchase.order.PurchaseOrderExceptions;
 import pico.erp.purchase.order.PurchaseOrderId;
 import pico.erp.purchase.order.PurchaseOrderMapper;
-import pico.erp.purchase.request.item.PurchaseRequestItemData;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
-import pico.erp.purchase.request.item.PurchaseRequestItemService;
 import pico.erp.shared.data.Auditor;
 
 @Mapper
@@ -62,20 +59,12 @@ public abstract class PurchaseOrderItemMapper {
   @Autowired
   protected PurchaseOrderItemUnitCostEstimator unitCostEstimator;
 
-  @Lazy
-  @Autowired
-  private PurchaseRequestItemService purchaseRequestItemService;
-
   protected PurchaseOrderItemId id(PurchaseOrderItem purchaseRequestItem) {
     return purchaseRequestItem != null ? purchaseRequestItem.getId() : null;
   }
 
   @Mappings({
     @Mapping(target = "orderId", source = "order.id"),
-    @Mapping(target = "itemId", source = "item.id"),
-    @Mapping(target = "itemSpecId", source = "itemSpec.id"),
-    @Mapping(target = "projectId", source = "project.id"),
-    @Mapping(target = "requestItemId", source = "requestItem.id"),
     @Mapping(target = "createdBy", ignore = true),
     @Mapping(target = "createdDate", ignore = true),
     @Mapping(target = "lastModifiedBy", ignore = true),
@@ -87,16 +76,17 @@ public abstract class PurchaseOrderItemMapper {
     return PurchaseOrderItem.builder()
       .id(entity.getId())
       .order(map(entity.getOrderId()))
-      .item(map(entity.getItemId()))
-      .itemSpec(map(entity.getItemSpecId()))
+      .itemId(entity.getItemId())
+      .itemSpecId(entity.getItemSpecId())
+      .itemSpecCode(entity.getItemSpecCode())
       .quantity(entity.getQuantity())
       .receivedQuantity(entity.getReceivedQuantity())
       .estimatedUnitCost(entity.getEstimatedUnitCost())
       .unitCost(entity.getUnitCost())
       .unit(entity.getUnit())
       .remark(entity.getRemark())
-      .project(map(entity.getProjectId()))
-      .requestItem(map(entity.getRequestItemId()))
+      .projectId(entity.getProjectId())
+      .requestId(entity.getRequestId())
       .status(entity.getStatus())
       .build();
   }
@@ -137,36 +127,19 @@ public abstract class PurchaseOrderItemMapper {
       .orElse(null);
   }
 
-  protected PurchaseRequestItemData map(PurchaseRequestItemId purchaseRequestItemId) {
-    return Optional.ofNullable(purchaseRequestItemId)
-      .map(purchaseRequestItemService::get)
-      .orElse(null);
-  }
-
-
-
   @Mappings({
-    @Mapping(target = "orderId", source = "order.id"),
-    @Mapping(target = "itemId", source = "item.id"),
-    @Mapping(target = "itemSpecId", source = "itemSpec.id"),
-    @Mapping(target = "projectId", source = "project.id"),
-    @Mapping(target = "requestItemId", source = "requestItem.id")
+    @Mapping(target = "orderId", source = "order.id")
   })
   public abstract PurchaseOrderItemData map(PurchaseOrderItem item);
 
   @Mappings({
     @Mapping(target = "order", source = "orderId"),
-    @Mapping(target = "item", source = "itemId"),
-    @Mapping(target = "itemSpec", source = "itemSpecId"),
-    @Mapping(target = "project", source = "projectId"),
-    @Mapping(target = "requestItem", source = "requestItemId"),
     @Mapping(target = "unitCostEstimator", expression = "java(unitCostEstimator)")
   })
   public abstract PurchaseOrderItemMessages.Create.Request map(
     PurchaseOrderItemRequests.CreateRequest request);
 
   @Mappings({
-    @Mapping(target = "itemSpec", source = "itemSpecId"),
     @Mapping(target = "unitCostEstimator", expression = "java(unitCostEstimator)")
   })
   public abstract PurchaseOrderItemMessages.Update.Request map(

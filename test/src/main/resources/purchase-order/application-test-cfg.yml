@@ -35,6 +35,7 @@ data:
     order-id: purchase-order-a
     item-id: material-paper-sc
     item-spec-id: material-paper-sc-spec-1
+    item-spec-code: N/A
     quantity: 3000
     unit: SHEET
     estimated-unit-cost: 300
@@ -44,6 +45,7 @@ data:
   - id: purchase-order-a-2
     order-id: purchase-order-a
     item-id: material-cfb-sk.k-e
+    item-spec-code: N/A
     quantity: 4000
     unit: M2
     estimated-unit-cost: 275
@@ -53,6 +55,7 @@ data:
   - id: purchase-order-b-1
     order-id: purchase-order-b
     item-id: material-paper-sc
+    item-spec-code: N/A
     unit: SHEET
     item-spec-id: material-paper-sc-spec-1
     quantity: 3000
@@ -63,6 +66,7 @@ data:
   - id: purchase-order-b-2
     order-id: purchase-order-b
     item-id: material-cfb-sk.k-e
+    item-spec-code: N/A
     quantity: 4000
     unit: M2
     estimated-unit-cost: 275

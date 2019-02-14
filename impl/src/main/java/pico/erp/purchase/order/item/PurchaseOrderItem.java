@@ -3,7 +3,6 @@ package pico.erp.purchase.order.item;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Arrays;
-import java.util.Optional;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -13,14 +12,15 @@ import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
 import pico.erp.audit.annotation.Audit;
-import pico.erp.item.ItemData;
-import pico.erp.item.spec.ItemSpecData;
-import pico.erp.project.ProjectData;
+import pico.erp.item.ItemId;
+import pico.erp.item.spec.ItemSpecCode;
+import pico.erp.item.spec.ItemSpecId;
+import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrder;
 import pico.erp.purchase.order.PurchaseOrderExceptions;
 import pico.erp.purchase.order.item.PurchaseOrderItemUnitCostEstimator.PurchaseOrderItemContext;
 import pico.erp.purchase.order.item.PurchaseOrderItemUnitCostEstimator.PurchaseOrderItemContextImpl;
-import pico.erp.purchase.request.item.PurchaseRequestItemData;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.data.UnitKind;
 
 /**
@@ -42,9 +42,11 @@ public class PurchaseOrderItem implements Serializable {
 
   PurchaseOrder order;
 
-  ItemData item;
+  ItemId itemId;
 
-  ItemSpecData itemSpec;
+  ItemSpecId itemSpecId;
+
+  ItemSpecCode itemSpecCode;
 
   BigDecimal quantity;
 
@@ -58,9 +60,9 @@ public class PurchaseOrderItem implements Serializable {
 
   String remark;
 
-  ProjectData project;
+  ProjectId projectId;
 
-  PurchaseRequestItemData requestItem;
+  PurchaseRequestId requestId;
 
   PurchaseOrderItemStatusKind status;
 
@@ -74,13 +76,14 @@ public class PurchaseOrderItem implements Serializable {
     }
     this.id = request.getId();
     this.order = request.getOrder();
-    this.item = request.getItem();
-    this.itemSpec = request.getItemSpec();
+    this.itemId = request.getItemId();
+    this.itemSpecId = request.getItemSpecId();
+    this.itemSpecCode = request.getItemSpecCode();
     this.quantity = request.getQuantity();
     this.unitCost = request.getUnitCost();
     this.remark = request.getRemark();
-    this.project = request.getProject();
-    this.requestItem = request.getRequestItem();
+    this.projectId = request.getProjectId();
+    this.requestId = request.getRequestId();
     this.receivedQuantity = BigDecimal.ZERO;
     this.status = PurchaseOrderItemStatusKind.DRAFT;
     this.estimatedUnitCost = request.getUnitCostEstimator().estimate(createContext());
@@ -95,7 +98,8 @@ public class PurchaseOrderItem implements Serializable {
     if (!this.isUpdatable()) {
       throw new PurchaseOrderItemExceptions.CannotUpdateException();
     }
-    this.itemSpec = request.getItemSpec();
+    this.itemSpecId = request.getItemSpecId();
+    this.itemSpecCode = request.getItemSpecCode();
     this.unitCost = request.getUnitCost();
     this.quantity = request.getQuantity();
     this.remark = request.getRemark();
@@ -178,12 +182,8 @@ public class PurchaseOrderItem implements Serializable {
 
   private PurchaseOrderItemContext createContext() {
     return PurchaseOrderItemContextImpl.builder()
-      .itemId(item.getId())
-      .itemSpecId(
-        Optional.ofNullable(itemSpec)
-          .map(ItemSpecData::getId)
-          .orElse(null)
-      )
+      .itemId(itemId)
+      .itemSpecId(itemSpecId)
       .quantity(quantity)
       .build();
   }

@@ -14,7 +14,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.created";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -29,7 +29,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.updated";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -44,7 +44,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.deleted";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -59,7 +59,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.received";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     private boolean completed;
 
@@ -76,7 +76,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.determined";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -91,7 +91,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.canceled";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -106,7 +106,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.sent";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;
@@ -121,7 +121,7 @@ public interface PurchaseOrderItemEvents {
 
     public final static String CHANNEL = "event.purchase-order-item.rejected";
 
-    private PurchaseOrderItemId purchaseOrderItemId;
+    private PurchaseOrderItemId id;
 
     public String channel() {
       return CHANNEL;

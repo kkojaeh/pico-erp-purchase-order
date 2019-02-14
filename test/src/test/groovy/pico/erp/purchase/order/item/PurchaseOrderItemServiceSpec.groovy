@@ -8,6 +8,7 @@ import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.item.ItemId
+import pico.erp.item.spec.ItemSpecCode
 import pico.erp.project.ProjectId
 import pico.erp.purchase.order.PurchaseOrderId
 import pico.erp.purchase.order.PurchaseOrderRequests
@@ -37,6 +38,8 @@ class PurchaseOrderItemServiceSpec extends Specification {
   def unknownId = PurchaseOrderItemId.from("unknown")
 
   def itemId = ItemId.from("item-1")
+
+  def itemSpecCode = ItemSpecCode.NOT_APPLICABLE
 
   def unitCost = 100
 
@@ -96,6 +99,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
         id: id,
         orderId: orderId,
         itemId: itemId,
+        itemSpecCode: itemSpecCode,
         quantity: 100,
         unit: unit,
         unitCost: unitCost,
@@ -111,6 +115,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
         id: PurchaseOrderItemId.from("purchase-order-item-2"),
         orderId: orderId,
         itemId: itemId,
+        itemSpecCode: itemSpecCode,
         quantity: 100,
         unit: unit,
         unitCost: unitCost,
@@ -124,6 +129,7 @@ class PurchaseOrderItemServiceSpec extends Specification {
     orderItemService.update(
       new PurchaseOrderItemRequests.UpdateRequest(
         id: id,
+        itemSpecCode: itemSpecCode,
         quantity: 200,
         remark: "품목 비고2",
         unitCost: unitCost

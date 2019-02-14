@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import pico.erp.purchase.order.item.PurchaseOrderItemEvents;
 import pico.erp.purchase.order.item.PurchaseOrderItemService;
 import pico.erp.purchase.order.item.PurchaseOrderItemStatusKind;
-import pico.erp.purchase.request.item.PurchaseRequestItemRequests;
-import pico.erp.purchase.request.item.PurchaseRequestItemService;
+import pico.erp.purchase.request.PurchaseRequestRequests;
+import pico.erp.purchase.request.PurchaseRequestService;
 
 @SuppressWarnings("unused")
 @Component
@@ -26,21 +26,40 @@ public class PurchaseOrderEventListener {
 
   @Lazy
   @Autowired
-  private PurchaseRequestItemService purchaseRequestItemService;
+  private PurchaseRequestService purchaseRequestService;
+
+  @EventListener
+  @JmsListener(destination = LISTENER_NAME + "."
+    + PurchaseOrderItemEvents.CanceledEvent.CHANNEL)
+  public void onOrderItemCanceled(PurchaseOrderItemEvents.CanceledEvent event) {
+    val orderItem = purchaseOrderItemService.get(event.getId());
+    val order = purchaseOrderService.get(orderItem.getOrderId());
+    if (order.isCancelable()) {
+      val allCanceled = purchaseOrderItemService.getAll(orderItem.getOrderId()).stream()
+        .allMatch(item -> item.getStatus() == PurchaseOrderItemStatusKind.CANCELED);
+      if (allCanceled) {
+        purchaseOrderService.cancel(
+          PurchaseOrderRequests.CancelRequest.builder()
+            .id(orderItem.getOrderId())
+            .build()
+        );
+      }
+    }
+  }
 
   @EventListener
   @JmsListener(destination = LISTENER_NAME + "."
     + PurchaseOrderItemEvents.ReceivedEvent.CHANNEL)
   public void onOrderItemReceived(PurchaseOrderItemEvents.ReceivedEvent event) {
     if (event.isCompleted()) {
-      val orderItem = purchaseOrderItemService.get(event.getPurchaseOrderItemId());
+      val orderItem = purchaseOrderItemService.get(event.getId());
       val orderId = orderItem.getOrderId();
 
-      val requestItemId = orderItem.getRequestItemId();
-      if (requestItemId != null) {
-        purchaseRequestItemService.complete(
-          PurchaseRequestItemRequests.CompleteRequest.builder()
-            .id(requestItemId)
+      val requestId = orderItem.getRequestId();
+      if (requestId != null) {
+        purchaseRequestService.complete(
+          PurchaseRequestRequests.CompleteRequest.builder()
+            .id(requestId)
             .build()
         );
       }

@@ -29,10 +29,11 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.item.ItemId;
+import pico.erp.item.spec.ItemSpecCode;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Auditor;
 import pico.erp.shared.data.UnitKind;
@@ -40,7 +41,7 @@ import pico.erp.shared.data.UnitKind;
 @Entity(name = "PurchaseOrderItem")
 @Table(name = "PCO_PURCHASE_ORDER_ITEM", indexes = {
   @Index(columnList = "ORDER_ID"),
-  @Index(columnList = "REQUEST_ITEM_ID")
+  @Index(columnList = "REQUEST_ID")
 })
 @Data
 @EqualsAndHashCode(of = "id")
@@ -80,6 +81,11 @@ public class PurchaseOrderItemEntity implements Serializable {
   })
   ItemSpecId itemSpecId;
 
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "ITEM_SPEC_CODE", length = TypeDefinitions.CODE_LENGTH))
+  })
+  ItemSpecCode itemSpecCode;
+
   @Column(precision = 19, scale = 2)
   BigDecimal quantity;
 
@@ -100,9 +106,9 @@ public class PurchaseOrderItemEntity implements Serializable {
   String remark;
 
   @AttributeOverrides({
-    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ITEM_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+    @AttributeOverride(name = "value", column = @Column(name = "REQUEST_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
   })
-  PurchaseRequestItemId requestItemId;
+  PurchaseRequestId requestId;
 
   @Column(length = TypeDefinitions.ENUM_LENGTH)
   @Enumerated(EnumType.STRING)

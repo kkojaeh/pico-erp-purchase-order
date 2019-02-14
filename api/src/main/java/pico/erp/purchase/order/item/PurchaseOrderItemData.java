@@ -9,7 +9,7 @@ import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecId;
 import pico.erp.project.ProjectId;
 import pico.erp.purchase.order.PurchaseOrderId;
-import pico.erp.purchase.request.item.PurchaseRequestItemId;
+import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.data.UnitKind;
 
 @Builder
@@ -40,7 +40,7 @@ public class PurchaseOrderItemData {
 
   ProjectId projectId;
 
-  PurchaseRequestItemId requestItemId;
+  PurchaseRequestId requestId;
 
   PurchaseOrderItemStatusKind status;
 
