@@ -126,7 +126,7 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
           .orElse(purchaseRequest.getQuantity());
         val unit = Optional.ofNullable(itemSpec)
           .map(spec -> spec.getPurchaseUnit())
-          .orElse(item.getUnit());
+          .orElse(purchaseRequest.getUnit());
         val unitCost = Optional.ofNullable(itemSpec)
           .map(spec -> spec.getPurchaseUnitCost())
           .orElse(item.getBaseUnitCost());
