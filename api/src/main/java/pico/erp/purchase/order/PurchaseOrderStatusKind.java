@@ -15,6 +15,11 @@ public enum PurchaseOrderStatusKind implements LocalizedNameable {
   DETERMINED,
 
   /**
+   * 전송 준비완료
+   */
+  SEND_PREPARED,
+
+  /**
    * 전송 완료
    */
   SENT,
@@ -35,7 +40,7 @@ public enum PurchaseOrderStatusKind implements LocalizedNameable {
   RECEIVED;
 
   public boolean isCancelable() {
-    return this == DRAFT || this == DETERMINED;
+    return this == DRAFT || this == DETERMINED || this == SEND_PREPARED;
   }
 
   public boolean isDeterminable() {
@@ -50,8 +55,12 @@ public enum PurchaseOrderStatusKind implements LocalizedNameable {
     return this == SENT;
   }
 
-  public boolean isSendable() {
+  public boolean isSendPreparable() {
     return this == DETERMINED;
+  }
+
+  public boolean isSendable() {
+    return this == SEND_PREPARED;
   }
 
   public boolean isUpdatable() {

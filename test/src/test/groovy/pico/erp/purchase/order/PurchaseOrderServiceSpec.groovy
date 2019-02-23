@@ -244,7 +244,7 @@ class PurchaseOrderServiceSpec extends Specification {
     determineOrder()
     def order = orderService.get(id)
     then:
-    order.status == PurchaseOrderStatusKind.DETERMINED
+    order.status == PurchaseOrderStatusKind.SEND_PREPARED
   }
 
   def "확정 - 확정 후 확정"() {

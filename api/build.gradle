@@ -23,4 +23,8 @@ dependencies {
 
   compile("com.github.kkojaeh.pico-erp-warehouse:api:${warehouseVersion}")
 
+  compile("com.github.kkojaeh.pico-erp-e-document:api:${documentVersion}")
+
+  compile("com.github.kkojaeh.pico-erp-delivery:api:${deliveryVersion}")
+
 }

@@ -39,7 +39,7 @@ class MessageSourceSpec extends Specification {
     println messages
 
     then:
-    messages.size() == 6
+    messages.size() == 7
   }
 
   def "발주 품목 상태"() {

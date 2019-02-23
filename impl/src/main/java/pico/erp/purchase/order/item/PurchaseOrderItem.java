@@ -11,7 +11,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
 import pico.erp.item.ItemId;
 import pico.erp.item.spec.ItemSpecCode;
 import pico.erp.item.spec.ItemSpecId;
@@ -30,9 +29,8 @@ import pico.erp.shared.data.UnitKind;
 @ToString
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder(toBuilder = true)
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Audit(alias = "purchase-order-item")
 public class PurchaseOrderItem implements Serializable {
 
   private static final long serialVersionUID = 1L;

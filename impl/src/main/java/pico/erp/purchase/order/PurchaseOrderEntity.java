@@ -27,6 +27,8 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pico.erp.company.CompanyId;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.document.DocumentId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.data.Auditor;
@@ -124,5 +126,15 @@ public class PurchaseOrderEntity implements Serializable {
 
   @LastModifiedDate
   OffsetDateTime lastModifiedDate;
+
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "DRAFT_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  DocumentId draftId;
+
+  @AttributeOverrides({
+    @AttributeOverride(name = "value", column = @Column(name = "DELIVERY_ID", length = TypeDefinitions.UUID_BINARY_LENGTH))
+  })
+  DeliveryId deliveryId;
 
 }

@@ -3,6 +3,8 @@ package pico.erp.purchase.order;
 import java.time.OffsetDateTime;
 import lombok.Data;
 import pico.erp.company.CompanyId;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.document.DocumentId;
 import pico.erp.shared.data.Address;
 import pico.erp.user.UserId;
 
@@ -52,5 +54,10 @@ public class PurchaseOrderData {
   boolean updatable;
 
   boolean printable;
+
+  DocumentId draftId;
+
+  DeliveryId deliveryId;
+
 
 }

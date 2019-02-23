@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import pico.erp.audit.AuditService;
 import pico.erp.item.ItemService;
 import pico.erp.item.spec.ItemSpecRequests;
 import pico.erp.item.spec.ItemSpecService;
@@ -38,10 +37,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
 
   @Lazy
   @Autowired
-  private AuditService auditService;
-
-  @Lazy
-  @Autowired
   private ItemSpecService itemSpecService;
 
   @Lazy
@@ -58,7 +53,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -70,7 +64,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       throw new PurchaseOrderItemExceptions.AlreadyExistsException();
     }
     val created = purchaseOrderItemRepository.create(item);
-    auditService.commit(created);
     eventPublisher.publishEvents(response.getEvents());
     return mapper.map(created);
   }
@@ -81,7 +74,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.deleteBy(item.getId());
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -91,7 +83,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -178,7 +169,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -188,7 +178,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -198,7 +187,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 
@@ -208,7 +196,6 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
       .orElseThrow(PurchaseOrderItemExceptions.NotFoundException::new);
     val response = item.apply(mapper.map(request));
     purchaseOrderItemRepository.update(item);
-    auditService.commit(item);
     eventPublisher.publishEvents(response.getEvents());
   }
 

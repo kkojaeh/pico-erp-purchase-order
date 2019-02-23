@@ -3,6 +3,7 @@ package pico.erp.purchase.order;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -11,11 +12,12 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.FieldDefaults;
-import pico.erp.audit.annotation.Audit;
-import pico.erp.company.CompanyData;
+import pico.erp.company.CompanyId;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.document.DocumentId;
 import pico.erp.purchase.order.PurchaseOrderEvents.DeterminedEvent;
 import pico.erp.shared.data.Address;
-import pico.erp.user.UserData;
+import pico.erp.user.UserId;
 
 /**
  * 주문 접수
@@ -24,9 +26,8 @@ import pico.erp.user.UserData;
 @ToString
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-@Builder(toBuilder = true)
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@Audit(alias = "purchase-order")
 public class PurchaseOrder implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -38,15 +39,15 @@ public class PurchaseOrder implements Serializable {
 
   OffsetDateTime dueDate;
 
-  CompanyData supplier;
+  CompanyId supplierId;
 
-  CompanyData receiver;
+  CompanyId receiverId;
 
   Address receiveAddress;
 
   String remark;
 
-  UserData charger;
+  UserId chargerId;
 
   OffsetDateTime determinedDate;
 
@@ -62,6 +63,9 @@ public class PurchaseOrder implements Serializable {
 
   String rejectedReason;
 
+  DocumentId draftId;
+
+  DeliveryId deliveryId;
 
   public PurchaseOrder() {
 
@@ -71,12 +75,12 @@ public class PurchaseOrder implements Serializable {
     PurchaseOrderMessages.Create.Request request) {
     this.id = request.getId();
     this.dueDate = request.getDueDate();
-    this.supplier = request.getSupplier();
-    this.receiver = request.getReceiver();
+    this.supplierId = request.getSupplierId();
+    this.receiverId = request.getReceiverId();
     this.receiveAddress = request.getReceiveAddress();
     this.remark = request.getRemark();
     this.status = PurchaseOrderStatusKind.DRAFT;
-    this.charger = request.getCharger();
+    this.chargerId = request.getChargerId();
     this.code = request.getCodeGenerator().generate(this);
     return new PurchaseOrderMessages.Create.Response(
       Arrays.asList(new PurchaseOrderEvents.CreatedEvent(this.id))
@@ -89,9 +93,10 @@ public class PurchaseOrder implements Serializable {
       throw new PurchaseOrderExceptions.CannotUpdateException();
     }
     this.dueDate = request.getDueDate();
-    this.supplier = request.getSupplier();
-    this.receiver = request.getReceiver();
+    this.supplierId = request.getSupplierId();
+    this.receiverId = request.getReceiverId();
     this.receiveAddress = request.getReceiveAddress();
+    this.chargerId = request.getChargerId();
     this.remark = request.getRemark();
     return new PurchaseOrderMessages.Update.Response(
       Arrays.asList(new PurchaseOrderEvents.UpdatedEvent(this.id))
@@ -159,6 +164,18 @@ public class PurchaseOrder implements Serializable {
     );
   }
 
+  public PurchaseOrderMessages.PrepareSend.Response apply(
+    PurchaseOrderMessages.PrepareSend.Request request) {
+    if (!isSendPreparable()) {
+      throw new PurchaseOrderExceptions.CannotPrepareSendException();
+    }
+    this.draftId = request.getDraftId();
+    this.deliveryId = request.getDeliveryId();
+    this.status = PurchaseOrderStatusKind.SEND_PREPARED;
+    return new PurchaseOrderMessages.PrepareSend.Response(
+      Collections.emptyList()
+    );
+  }
 
   public boolean isCancelable() {
     return status.isCancelable();
@@ -186,6 +203,10 @@ public class PurchaseOrder implements Serializable {
 
   public boolean isPrintable() {
     return status.isPrintable();
+  }
+
+  public boolean isSendPreparable() {
+    return status.isSendPreparable();
   }
 
 

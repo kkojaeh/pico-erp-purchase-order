@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import pico.erp.company.CompanyId;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.document.DocumentId;
 import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
@@ -115,6 +117,26 @@ public interface PurchaseOrderRequests {
   @NoArgsConstructor
   @AllArgsConstructor
   @Builder
+  class PrepareSendRequest {
+
+    @Valid
+    @NotNull
+    PurchaseOrderId id;
+
+    @Valid
+    @NotNull
+    DocumentId draftId;
+
+    @Valid
+    @NotNull
+    DeliveryId deliveryId;
+
+  }
+
+  @Data
+  @NoArgsConstructor
+  @AllArgsConstructor
+  @Builder
   class ReceiveRequest {
 
     @Valid
@@ -170,16 +192,6 @@ public interface PurchaseOrderRequests {
 
   }
 
-  @Data
-  @NoArgsConstructor
-  @AllArgsConstructor
-  @Builder
-  class PrintDraftRequest {
 
-    @Valid
-    @NotNull
-    PurchaseOrderId id;
-
-  }
 
 }

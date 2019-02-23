@@ -47,6 +47,12 @@ public interface PurchaseOrderExceptions {
     private static final long serialVersionUID = 1L;
   }
 
+  @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "purchase-order.cannot.prepare-send.exception")
+  class CannotPrepareSendException extends RuntimeException {
+
+    private static final long serialVersionUID = 1L;
+  }
+
   @ResponseStatus(code = HttpStatus.NOT_ACCEPTABLE, reason = "purchase-order.cannot.generate.exception")
   class CannotGenerateException extends RuntimeException {
 

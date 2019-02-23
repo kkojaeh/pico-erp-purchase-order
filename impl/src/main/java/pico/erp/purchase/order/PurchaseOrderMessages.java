@@ -8,11 +8,13 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 import lombok.Value;
-import pico.erp.company.CompanyData;
+import pico.erp.company.CompanyId;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.document.DocumentId;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.event.Event;
-import pico.erp.user.UserData;
+import pico.erp.user.UserId;
 
 public interface PurchaseOrderMessages {
 
@@ -29,10 +31,10 @@ public interface PurchaseOrderMessages {
       @NotNull
       OffsetDateTime dueDate;
 
-      CompanyData supplier;
+      CompanyId supplierId;
 
       @NotNull
-      CompanyData receiver;
+      CompanyId receiverId;
 
       @NotNull
       Address receiveAddress;
@@ -41,7 +43,7 @@ public interface PurchaseOrderMessages {
       String remark;
 
       @NotNull
-      UserData charger;
+      UserId chargerId;
 
       @NotNull
       PurchaseOrderCodeGenerator codeGenerator;
@@ -67,16 +69,16 @@ public interface PurchaseOrderMessages {
       OffsetDateTime dueDate;
 
       @NotNull
-      CompanyData supplier;
+      CompanyId supplierId;
 
       @NotNull
-      CompanyData receiver;
+      CompanyId receiverId;
 
       @NotNull
       Address receiveAddress;
 
       @NotNull
-      UserData charger;
+      UserId chargerId;
 
       @Size(max = TypeDefinitions.REMARK_LENGTH)
       String remark;
@@ -162,6 +164,26 @@ public interface PurchaseOrderMessages {
 
     @Data
     class Request {
+
+    }
+
+    @Value
+    class Response {
+
+      Collection<Event> events;
+
+    }
+
+  }
+
+  interface PrepareSend {
+
+    @Data
+    class Request {
+
+      DocumentId draftId;
+
+      DeliveryId deliveryId;
 
     }
 
