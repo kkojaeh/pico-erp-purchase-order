@@ -5,7 +5,9 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import pico.erp.company.CompanyService;
 import pico.erp.company.address.CompanyAddressData;
@@ -59,8 +61,13 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
   @Autowired
   private ItemService itemService;
 
+  @Lazy
+  @Autowired
+  private MessageSource messageSource;
+
   @Override
   public Object getContext(PurchaseOrderId key) {
+    val locale = LocaleContextHolder.getLocale();
     val context = contextFactory.factory();
     val data = context.getData();
     val order = purchaseOrderService.get(key);
@@ -89,6 +96,9 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
         val map = new HashMap<String, Object>();
         map.put("order", orderItem);
         map.put("item", itemService.get(orderItem.getItemId()));
+        map.put("unitLabel", messageSource
+          .getMessage(orderItem.getUnit().getNameCode(), null, orderItem.getUnit().getDefault(),
+            locale));
         return map;
       })
       .collect(Collectors.toList());
