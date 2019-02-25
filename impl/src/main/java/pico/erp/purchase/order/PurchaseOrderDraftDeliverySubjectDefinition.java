@@ -1,5 +1,6 @@
 package pico.erp.purchase.order;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import pico.erp.company.CompanyService;
+import pico.erp.company.address.CompanyAddressData;
+import pico.erp.company.address.CompanyAddressService;
 import pico.erp.delivery.subject.DeliverySubjectDefinition;
 import pico.erp.delivery.subject.DeliverySubjectId;
 import pico.erp.shared.Public;
@@ -39,17 +42,39 @@ public class PurchaseOrderDraftDeliverySubjectDefinition implements
   @Autowired
   private UserService userService;
 
+  @Lazy
+  @Autowired
+  private CompanyAddressService companyAddressService;
+
   @Override
   public List<ContentInputStream> getAttachments(PurchaseOrderId key) {
-    return null;
+    return Collections.emptyList();
   }
 
   @Override
   public Object getContext(PurchaseOrderId key) {
     val data = new HashMap<String, Object>();
+    val owner = companyService.getOwner();
     val order = purchaseOrderService.get(key);
+    val ownerAddress = companyAddressService.getAll(owner.getId()).stream()
+      .filter(c -> c.isRepresented())
+      .findFirst()
+      .orElse(new CompanyAddressData());
+
+    val receiverAddress = companyAddressService.getAll(order.getReceiverId()).stream()
+      .filter(c -> c.isRepresented())
+      .findFirst()
+      .orElse(new CompanyAddressData());
+
+    val supplierAddress = companyAddressService.getAll(order.getSupplierId()).stream()
+      .filter(c -> c.isRepresented())
+      .findFirst()
+      .orElse(new CompanyAddressData());
     data.put("supplier", companyService.get(order.getSupplierId()));
-    data.put("owner", companyService.getOwner());
+    data.put("owner", owner);
+    data.put("ownerAddress", ownerAddress);
+    data.put("receiverAddress", receiverAddress);
+    data.put("supplierAddress", supplierAddress);
     data.put("charger", userService.get(order.getChargerId()));
     data.put("order", order);
     return data;
