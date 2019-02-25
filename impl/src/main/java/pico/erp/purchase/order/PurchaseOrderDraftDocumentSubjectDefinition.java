@@ -1,6 +1,8 @@
 package pico.erp.purchase.order;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.val;
@@ -91,7 +93,7 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
       .orElse(new CompanyAddressData());
 
     val charger = userService.get(order.getChargerId());
-    val items = purchaseOrderItemService.getAll(key).stream()
+    List<Map<String, Object>> items = purchaseOrderItemService.getAll(key).stream()
       .map(orderItem -> {
         val map = new HashMap<String, Object>();
         map.put("order", orderItem);
