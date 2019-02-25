@@ -1,5 +1,7 @@
 package pico.erp.purchase.order;
 
+import java.util.HashMap;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import pico.erp.company.address.CompanyAddressService;
 import pico.erp.document.context.DocumentContextFactory;
 import pico.erp.document.subject.DocumentSubjectDefinition;
 import pico.erp.document.subject.DocumentSubjectId;
+import pico.erp.item.ItemService;
 import pico.erp.purchase.order.item.PurchaseOrderItemService;
 import pico.erp.shared.Public;
 import pico.erp.user.UserService;
@@ -52,12 +55,16 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
   @Autowired
   private UserService userService;
 
+  @Lazy
+  @Autowired
+  private ItemService itemService;
+
   @Override
   public Object getContext(PurchaseOrderId key) {
     val context = contextFactory.factory();
     val data = context.getData();
     val order = purchaseOrderService.get(key);
-    val items = purchaseOrderItemService.getAll(key);
+
     val owner = companyService.getOwner();
     val supplier = companyService.get(order.getSupplierId());
     val receiver = companyService.get(order.getReceiverId());
@@ -77,6 +84,14 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
       .orElse(new CompanyAddressData());
 
     val charger = userService.get(order.getChargerId());
+    val items = purchaseOrderItemService.getAll(key).stream()
+      .map(orderItem -> {
+        val map = new HashMap<String, Object>();
+        map.put("order", orderItem);
+        map.put("item", itemService.get(orderItem.getItemId()));
+        return map;
+      })
+      .collect(Collectors.toList());
 
     data.put("owner", owner);
     data.put("supplier", supplier);
