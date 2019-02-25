@@ -59,6 +59,8 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
     val order = purchaseOrderService.get(key);
     val items = purchaseOrderItemService.getAll(key);
     val owner = companyService.getOwner();
+    val supplier = companyService.get(order.getSupplierId());
+    val receiver = companyService.get(order.getReceiverId());
     val ownerAddress = companyAddressService.getAll(owner.getId()).stream()
       .filter(c -> c.isRepresented())
       .findFirst()
@@ -77,6 +79,8 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
     val charger = userService.get(order.getChargerId());
 
     data.put("owner", owner);
+    data.put("supplier", supplier);
+    data.put("receiver", receiver);
     data.put("ownerAddress", ownerAddress);
     data.put("receiverAddress", receiverAddress);
     data.put("supplierAddress", supplierAddress);
