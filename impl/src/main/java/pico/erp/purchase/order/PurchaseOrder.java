@@ -3,7 +3,6 @@ package pico.erp.purchase.order;
 import java.io.Serializable;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
-import java.util.Collections;
 import javax.persistence.Id;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -108,6 +107,8 @@ public class PurchaseOrder implements Serializable {
     if (!isDeterminable()) {
       throw new PurchaseOrderExceptions.CannotDetermineException();
     }
+    this.draftId = request.getDraftId();
+    this.deliveryId = request.getDeliveryId();
     this.status = PurchaseOrderStatusKind.DETERMINED;
     this.determinedDate = OffsetDateTime.now();
     return new PurchaseOrderMessages.Determine.Response(
@@ -164,19 +165,6 @@ public class PurchaseOrder implements Serializable {
     );
   }
 
-  public PurchaseOrderMessages.PrepareSend.Response apply(
-    PurchaseOrderMessages.PrepareSend.Request request) {
-    if (!isSendPreparable()) {
-      throw new PurchaseOrderExceptions.CannotPrepareSendException();
-    }
-    this.draftId = request.getDraftId();
-    this.deliveryId = request.getDeliveryId();
-    this.status = PurchaseOrderStatusKind.SEND_PREPARED;
-    return new PurchaseOrderMessages.PrepareSend.Response(
-      Collections.emptyList()
-    );
-  }
-
   public boolean isCancelable() {
     return status.isCancelable();
   }
@@ -204,10 +192,5 @@ public class PurchaseOrder implements Serializable {
   public boolean isPrintable() {
     return status.isPrintable();
   }
-
-  public boolean isSendPreparable() {
-    return status.isSendPreparable();
-  }
-
 
 }

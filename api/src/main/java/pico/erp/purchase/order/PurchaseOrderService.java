@@ -21,8 +21,6 @@ public interface PurchaseOrderService {
 
   void send(@Valid @NotNull PurchaseOrderRequests.SendRequest request);
 
-  void prepareSend(@Valid @NotNull PurchaseOrderRequests.PrepareSendRequest request);
-
   void update(@Valid @NotNull PurchaseOrderRequests.UpdateRequest request);
 
   PurchaseOrderData generate(@Valid @NotNull PurchaseOrderRequests.GenerateRequest request);

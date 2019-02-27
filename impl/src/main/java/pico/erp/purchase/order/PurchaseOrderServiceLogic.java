@@ -1,6 +1,8 @@
 package pico.erp.purchase.order;
 
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,10 +12,16 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import pico.erp.company.CompanyService;
+import pico.erp.delivery.DeliveryId;
+import pico.erp.delivery.DeliveryRequests;
+import pico.erp.delivery.DeliveryService;
+import pico.erp.document.DocumentId;
+import pico.erp.document.DocumentRequests;
+import pico.erp.document.DocumentService;
 import pico.erp.purchase.order.PurchaseOrderRequests.CancelRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.DetermineRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.GenerateRequest;
-import pico.erp.purchase.order.PurchaseOrderRequests.PrepareSendRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.ReceiveRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
@@ -49,6 +57,18 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   @Autowired
   private SiteService siteService;
 
+  @Lazy
+  @Autowired
+  private DocumentService documentService;
+
+  @Lazy
+  @Autowired
+  private DeliveryService deliveryService;
+
+  @Lazy
+  @Autowired
+  private CompanyService companyService;
+
   @Override
   public void cancel(CancelRequest request) {
     val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
@@ -74,9 +94,42 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   public void determine(DetermineRequest request) {
     val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseOrder.apply(mapper.map(request));
+    val message = mapper.map(request);
+    val previousDraftId = purchaseOrder.getDraftId();
+    val draftId = DocumentId.generate();
+    val deliveryId = DeliveryId.generate();
+    message.setDeliveryId(deliveryId);
+    message.setDraftId(draftId);
+    val response = purchaseOrder.apply(message);
     purchaseOrderRepository.update(purchaseOrder);
     eventPublisher.publishEvents(response.getEvents());
+    if (previousDraftId != null) {
+      documentService.delete(
+        new DocumentRequests.DeleteRequest(previousDraftId)
+      );
+    }
+    val supplier = companyService.get(purchaseOrder.getSupplierId());
+    val name = String.format("PO-%s-%s-%s",
+      purchaseOrder.getCode().getValue(),
+      supplier.getName(),
+      DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now())
+    );
+    documentService.create(
+      DocumentRequests.CreateRequest.builder()
+        .id(draftId)
+        .subjectId(PurchaseOrderDraftDocumentSubjectDefinition.ID)
+        .name(name)
+        .key(purchaseOrder.getId())
+        .creatorId(purchaseOrder.getChargerId())
+        .build()
+    );
+    deliveryService.create(
+      DeliveryRequests.CreateRequest.builder()
+        .id(deliveryId)
+        .subjectId(PurchaseOrderDraftDeliverySubjectDefinition.ID)
+        .key(purchaseOrder.getId())
+        .build()
+    );
   }
 
   @Override
@@ -172,15 +225,6 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
 
   @Override
   public void send(SendRequest request) {
-    val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
-      .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
-    val response = purchaseOrder.apply(mapper.map(request));
-    purchaseOrderRepository.update(purchaseOrder);
-    eventPublisher.publishEvents(response.getEvents());
-  }
-
-  @Override
-  public void prepareSend(PrepareSendRequest request) {
     val purchaseOrder = purchaseOrderRepository.findBy(request.getId())
       .orElseThrow(PurchaseOrderExceptions.NotFoundException::new);
     val response = purchaseOrder.apply(mapper.map(request));

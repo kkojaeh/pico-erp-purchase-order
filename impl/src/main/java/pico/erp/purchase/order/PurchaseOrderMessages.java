@@ -99,6 +99,10 @@ public interface PurchaseOrderMessages {
     @Data
     class Request {
 
+      DocumentId draftId;
+
+      DeliveryId deliveryId;
+
     }
 
     @Value
@@ -164,26 +168,6 @@ public interface PurchaseOrderMessages {
 
     @Data
     class Request {
-
-    }
-
-    @Value
-    class Response {
-
-      Collection<Event> events;
-
-    }
-
-  }
-
-  interface PrepareSend {
-
-    @Data
-    class Request {
-
-      DocumentId draftId;
-
-      DeliveryId deliveryId;
 
     }
 

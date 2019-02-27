@@ -86,6 +86,10 @@ public abstract class PurchaseOrderMapper {
   public abstract PurchaseOrderMessages.Update.Request map(
     PurchaseOrderRequests.UpdateRequest request);
 
+  @Mappings({
+    @Mapping(target = "draftId", ignore = true),
+    @Mapping(target = "deliveryId", ignore = true)
+  })
   public abstract PurchaseOrderMessages.Determine.Request map(
     DetermineRequest request);
 
@@ -100,10 +104,6 @@ public abstract class PurchaseOrderMapper {
 
   public abstract PurchaseOrderMessages.Reject.Request map(
     PurchaseOrderRequests.RejectRequest request);
-
-  public abstract PurchaseOrderMessages.PrepareSend.Request map(
-    PurchaseOrderRequests.PrepareSendRequest request);
-
 
   public abstract void pass(PurchaseOrderEntity from, @MappingTarget PurchaseOrderEntity to);
 

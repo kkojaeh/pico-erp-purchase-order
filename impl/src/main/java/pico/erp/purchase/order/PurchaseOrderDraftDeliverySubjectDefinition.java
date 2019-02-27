@@ -1,6 +1,6 @@
 package pico.erp.purchase.order;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
@@ -13,6 +13,7 @@ import pico.erp.company.address.CompanyAddressData;
 import pico.erp.company.address.CompanyAddressService;
 import pico.erp.delivery.subject.DeliverySubjectDefinition;
 import pico.erp.delivery.subject.DeliverySubjectId;
+import pico.erp.document.DocumentService;
 import pico.erp.shared.Public;
 import pico.erp.shared.data.ContentInputStream;
 import pico.erp.user.UserService;
@@ -44,11 +45,16 @@ public class PurchaseOrderDraftDeliverySubjectDefinition implements
 
   @Lazy
   @Autowired
+  private DocumentService documentService;
+
+  @Lazy
+  @Autowired
   private CompanyAddressService companyAddressService;
 
   @Override
   public List<ContentInputStream> getAttachments(PurchaseOrderId key) {
-    return Collections.emptyList();
+    val order = purchaseOrderService.get(key);
+    return Arrays.asList(documentService.load(order.getDraftId()));
   }
 
   @Override
