@@ -1,5 +1,6 @@
 package pico.erp.purchase.order.item;
 
+import java.math.BigDecimal;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -107,10 +108,16 @@ public class PurchaseOrderItemEventListener {
   @JmsListener(destination = LISTENER_NAME + "."
     + PurchaseOrderItemEvents.RejectedEvent.CHANNEL)
   public void onOrderItemReceived(PurchaseOrderItemEvents.ReceivedEvent event) {
-    if (event.isCompleted()) {
-      val item = purchaseOrderItemService.get(event.getId());
-      val requestId = item.getRequestId();
-      if (requestId != null) {
+    val item = purchaseOrderItemService.get(event.getId());
+    val requestId = item.getRequestId();
+    if (requestId != null) {
+      purchaseRequestService.progress(
+        PurchaseRequestRequests.ProgressRequest.builder()
+          .id(requestId)
+          .progressedQuantity(event.getQuantity())
+          .build()
+      );
+      if (event.isCompleted()) {
         purchaseRequestService.complete(
           PurchaseRequestRequests.CompleteRequest.builder()
             .id(requestId)
@@ -118,6 +125,7 @@ public class PurchaseOrderItemEventListener {
         );
       }
     }
+
   }
 
   @EventListener
@@ -145,6 +153,7 @@ public class PurchaseOrderItemEventListener {
       purchaseRequestService.progress(
         PurchaseRequestRequests.ProgressRequest.builder()
           .id(requestId)
+          .progressedQuantity(BigDecimal.ZERO)
           .build()
       );
     }

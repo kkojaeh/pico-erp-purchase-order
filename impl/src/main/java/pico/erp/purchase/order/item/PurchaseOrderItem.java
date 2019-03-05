@@ -130,6 +130,7 @@ public class PurchaseOrderItem implements Serializable {
     }
     return new PurchaseOrderItemMessages.Receive.Response(
       Arrays.asList(new PurchaseOrderItemEvents.ReceivedEvent(this.id,
+        request.getQuantity(),
         this.status == PurchaseOrderItemStatusKind.RECEIVED))
     );
   }

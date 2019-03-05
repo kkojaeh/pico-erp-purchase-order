@@ -1,5 +1,6 @@
 package pico.erp.purchase.order.item;
 
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -60,6 +61,8 @@ public interface PurchaseOrderItemEvents {
     public final static String CHANNEL = "event.purchase-order-item.received";
 
     private PurchaseOrderItemId id;
+
+    private BigDecimal quantity;
 
     private boolean completed;
 
