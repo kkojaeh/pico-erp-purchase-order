@@ -106,7 +106,7 @@ public class PurchaseOrderItemEventListener {
 
   @EventListener
   @JmsListener(destination = LISTENER_NAME + "."
-    + PurchaseOrderItemEvents.RejectedEvent.CHANNEL)
+    + PurchaseOrderItemEvents.ReceivedEvent.CHANNEL)
   public void onOrderItemReceived(PurchaseOrderItemEvents.ReceivedEvent event) {
     val item = purchaseOrderItemService.get(event.getId());
     val requestId = item.getRequestId();
