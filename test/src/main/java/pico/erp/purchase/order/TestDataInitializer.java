@@ -14,7 +14,7 @@ import pico.erp.shared.ApplicationInitializer;
 
 @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 @Configuration
-@Profile({"default", "test"})
+@Profile({"test-data"})
 public class TestDataInitializer implements ApplicationInitializer {
 
   @Lazy
