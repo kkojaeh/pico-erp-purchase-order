@@ -12,7 +12,6 @@ import pico.erp.document.DocumentService;
 import pico.erp.purchase.order.item.PurchaseOrderItemEvents;
 import pico.erp.purchase.order.item.PurchaseOrderItemService;
 import pico.erp.purchase.order.item.PurchaseOrderItemStatusKind;
-import pico.erp.purchase.request.PurchaseRequestRequests;
 import pico.erp.purchase.request.PurchaseRequestService;
 
 @SuppressWarnings("unused")
@@ -69,15 +68,6 @@ public class PurchaseOrderEventListener {
     if (event.isCompleted()) {
       val orderItem = purchaseOrderItemService.get(event.getId());
       val orderId = orderItem.getOrderId();
-
-      val requestId = orderItem.getRequestId();
-      if (requestId != null) {
-        purchaseRequestService.complete(
-          PurchaseRequestRequests.CompleteRequest.builder()
-            .id(requestId)
-            .build()
-        );
-      }
 
       val received = purchaseOrderItemService.getAll(orderId).stream()
         .allMatch(item -> item.getStatus() == PurchaseOrderItemStatusKind.RECEIVED);
