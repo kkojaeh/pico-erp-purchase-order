@@ -1,28 +1,35 @@
 package pico.erp.purchase.order.item
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
+import pico.erp.company.CompanyApplication
+import pico.erp.delivery.DeliveryApplication
+import pico.erp.document.DocumentApplication
+import pico.erp.item.ItemApplication
 import pico.erp.item.ItemId
 import pico.erp.item.spec.ItemSpecCode
+import pico.erp.project.ProjectApplication
 import pico.erp.project.ProjectId
-import pico.erp.purchase.order.PurchaseOrderId
-import pico.erp.purchase.order.PurchaseOrderRequests
-import pico.erp.purchase.order.PurchaseOrderService
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.purchase.order.*
+import pico.erp.purchase.request.PurchaseRequestApplication
+import pico.erp.shared.TestParentApplication
 import pico.erp.shared.data.UnitKind
+import pico.erp.user.UserApplication
+import pico.erp.warehouse.WarehouseApplication
 import spock.lang.Specification
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [PurchaseOrderApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblings = [
+  UserApplication, ItemApplication, ProjectApplication, CompanyApplication, DocumentApplication, DeliveryApplication,
+  PurchaseRequestApplication, WarehouseApplication
+])
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class PurchaseOrderItemServiceSpec extends Specification {
 
   @Autowired

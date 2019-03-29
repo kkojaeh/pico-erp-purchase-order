@@ -4,11 +4,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.Take;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Component;
 import pico.erp.company.CompanyService;
@@ -19,10 +20,9 @@ import pico.erp.document.subject.DocumentSubjectDefinition;
 import pico.erp.document.subject.DocumentSubjectId;
 import pico.erp.item.ItemService;
 import pico.erp.purchase.order.item.PurchaseOrderItemService;
-import pico.erp.shared.Public;
 import pico.erp.user.UserService;
 
-@Public
+@Give
 @Component
 public class PurchaseOrderDraftDocumentSubjectDefinition implements
   DocumentSubjectDefinition<PurchaseOrderId, Object> {
@@ -35,35 +35,27 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
   @Getter
   String name = "[purchase-order] 발주서";
 
-  @Lazy
-  @Autowired
+  @Take
   private DocumentContextFactory contextFactory;
 
-  @Lazy
-  @Autowired
+  @Take
   private CompanyService companyService;
 
-  @Lazy
-  @Autowired
+  @Take
   private CompanyAddressService companyAddressService;
 
-  @Lazy
   @Autowired
   private PurchaseOrderService purchaseOrderService;
 
-  @Lazy
   @Autowired
   private PurchaseOrderItemService purchaseOrderItemService;
 
-  @Lazy
-  @Autowired
+  @Take
   private UserService userService;
 
-  @Lazy
-  @Autowired
+  @Take
   private ItemService itemService;
 
-  @Lazy
   @Autowired
   private MessageSource messageSource;
 

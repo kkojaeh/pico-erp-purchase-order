@@ -1,30 +1,33 @@
 package pico.erp.config;
 
 import java.math.BigDecimal;
+import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.Take;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import pico.erp.item.ItemService;
 import pico.erp.item.spec.ItemSpecService;
 import pico.erp.purchase.order.item.PurchaseOrderItemUnitCostEstimator;
-import pico.erp.shared.Public;
 
 @Configuration
 public class PurchaseOrderConfiguration {
 
-  @Public
-  @Component
+  @Bean
+  @Give
+  @ConditionalOnMissingBean(PurchaseOrderItemUnitCostEstimator.class)
+  public PurchaseOrderItemUnitCostEstimator defaultPurchaseOrderItemUnitCostEstimator() {
+    return new DefaultPurchaseOrderItemUnitCostEstimator();
+  }
+
   public static class DefaultPurchaseOrderItemUnitCostEstimator implements
     PurchaseOrderItemUnitCostEstimator {
 
-    @Lazy
-    @Autowired
+    @Take
     ItemService itemService;
 
-    @Lazy
-    @Autowired
+    @Take
     ItemSpecService itemSpecService;
 
     @Override

@@ -1,6 +1,6 @@
 package pico.erp.purchase.order;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Optional;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,7 @@ interface PurchaseOrderEntityRepository extends
   CrudRepository<PurchaseOrderEntity, PurchaseOrderId> {
 
   @Query("SELECT COUNT(pr) FROM PurchaseOrder pr WHERE pr.createdDate >= :begin AND pr.createdDate <= :end")
-  long countCreatedBetween(@Param("begin") OffsetDateTime begin, @Param("end") OffsetDateTime end);
+  long countCreatedBetween(@Param("begin") LocalDateTime begin, @Param("end") LocalDateTime end);
 
 }
 
@@ -30,7 +30,7 @@ public class PurchaseOrderRepositoryJpa implements PurchaseOrderRepository {
   private PurchaseOrderMapper mapper;
 
   @Override
-  public long countCreatedBetween(OffsetDateTime begin, OffsetDateTime end) {
+  public long countCreatedBetween(LocalDateTime begin, LocalDateTime end) {
     return repository.countCreatedBetween(begin, end);
   }
 
@@ -43,23 +43,23 @@ public class PurchaseOrderRepositoryJpa implements PurchaseOrderRepository {
 
   @Override
   public void deleteBy(PurchaseOrderId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(PurchaseOrderId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
   public Optional<PurchaseOrder> findBy(PurchaseOrderId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(PurchaseOrder plan) {
-    val entity = repository.findOne(plan.getId());
+    val entity = repository.findById(plan.getId()).get();
     mapper.pass(mapper.jpa(plan), entity);
     repository.save(entity);
   }

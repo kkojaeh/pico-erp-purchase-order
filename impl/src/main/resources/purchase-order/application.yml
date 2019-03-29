@@ -1,7 +1,8 @@
-banner:
-  location: classpath:purchase-order/banner.txt
-
 spring:
+  jmx:
+    default-domain: purchase-order
+  banner:
+    location: classpath:purchase-order/banner.txt
   application:
     name: pico-purchase-order
   session:
@@ -11,12 +12,15 @@ spring:
     basename: purchase-order-messages
     encoding: UTF-8
   datasource:
-    url: ${ORDER_DATASOURCE_URL:${DATASOURCE_URL:jdbc:p6spy:hsqldb:mem:purchase-order}}
-    driver-class-name: ${ORDER_DATASOURCE_DRIVER_CLASS_NAME:${DATASOURCE_DRIVER_CLASS_NAME:com.p6spy.engine.spy.P6SpyDriver}}
-    username: ${ORDER_DATASOURCE_USERNAME:${DATASOURCE_USERNAME:as}}
-    password: ${ORDER_DATASOURCE_PASSWORD:${DATASOURCE_PASSWORD:null}}
+    name: purchase-order-datasource
+    url: ${PURCHASE_ORDER_DATASOURCE_URL:${DATASOURCE_URL:jdbc:p6spy:hsqldb:mem:purchase-order}}
+    driver-class-name: ${PURCHASE_ORDER_DATASOURCE_DRIVER_CLASS_NAME:${DATASOURCE_DRIVER_CLASS_NAME:com.p6spy.engine.spy.P6SpyDriver}}
+    username: ${PURCHASE_ORDER_DATASOURCE_USERNAME:${DATASOURCE_USERNAME:as}}
+    password: ${PURCHASE_ORDER_DATASOURCE_PASSWORD:${DATASOURCE_PASSWORD:null}}
     hikari:
       maximum-pool-size: 4
+  flyway:
+    enabled: false
   jpa:
     database: HSQL
     hibernate:
@@ -82,9 +86,6 @@ logging:
   level:
     org:
       springframework: INFO
-
-flyway:
-  enabled: false
 
 purchase-order:
   print:

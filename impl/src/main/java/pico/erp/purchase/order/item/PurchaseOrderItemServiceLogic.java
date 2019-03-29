@@ -3,9 +3,10 @@ package pico.erp.purchase.order.item;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.Take;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -16,12 +17,11 @@ import pico.erp.purchase.order.PurchaseOrderId;
 import pico.erp.purchase.order.item.PurchaseOrderItemRequests.GenerateRequest;
 import pico.erp.purchase.request.PurchaseRequestId;
 import pico.erp.purchase.request.PurchaseRequestService;
-import pico.erp.shared.Public;
 import pico.erp.shared.event.EventPublisher;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@Give
 @Transactional
 @Validated
 public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
@@ -35,16 +35,13 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   @Autowired
   private PurchaseOrderItemMapper mapper;
 
-  @Lazy
-  @Autowired
+  @Take
   private ItemSpecService itemSpecService;
 
-  @Lazy
-  @Autowired
+  @Take
   private ItemService itemService;
 
-  @Lazy
-  @Autowired
+  @Take
   private PurchaseRequestService purchaseRequestService;
 
   @Override
