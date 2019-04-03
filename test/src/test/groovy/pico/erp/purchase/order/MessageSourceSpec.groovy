@@ -1,27 +1,26 @@
 package pico.erp.purchase.order
 
+import kkojaeh.spring.boot.component.SpringBootTestComponent
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.MessageSource
-import org.springframework.context.annotation.ComponentScan
-import org.springframework.context.annotation.Configuration
 import org.springframework.context.i18n.LocaleContextHolder
 import org.springframework.test.annotation.Rollback
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.transaction.annotation.Transactional
 import pico.erp.purchase.order.item.PurchaseOrderItemStatusKind
-import pico.erp.shared.IntegrationConfiguration
+import pico.erp.shared.ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier
+import pico.erp.shared.TestParentApplication
 import spock.lang.Specification
 
 import java.util.stream.Collectors
 import java.util.stream.Stream
 
-@SpringBootTest(classes = [IntegrationConfiguration])
+@SpringBootTest(classes = [PurchaseOrderApplication, TestConfig])
+@SpringBootTestComponent(parent = TestParentApplication, siblingsSupplier = ComponentDefinitionServiceLoaderTestComponentSiblingsSupplier.class)
 @Transactional
 @Rollback
 @ActiveProfiles("test")
-@Configuration
-@ComponentScan("pico.erp.config")
 class MessageSourceSpec extends Specification {
 
   @Autowired

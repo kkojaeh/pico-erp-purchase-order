@@ -1,14 +1,15 @@
 package pico.erp.purchase.order;
 
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import kkojaeh.spring.boot.component.ComponentAutowired;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,6 @@ import pico.erp.purchase.order.PurchaseOrderRequests.RejectRequest;
 import pico.erp.purchase.order.PurchaseOrderRequests.SendRequest;
 import pico.erp.purchase.request.PurchaseRequestService;
 import pico.erp.purchase.request.PurchaseRequestStatusKind;
-import pico.erp.shared.Public;
 import pico.erp.shared.TypeDefinitions;
 import pico.erp.shared.data.Address;
 import pico.erp.shared.event.EventPublisher;
@@ -35,7 +35,7 @@ import pico.erp.warehouse.location.site.SiteService;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Public
+@ComponentBean
 @Transactional
 @Validated
 public class PurchaseOrderServiceLogic implements PurchaseOrderService {
@@ -49,24 +49,19 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
   @Autowired
   private PurchaseOrderMapper mapper;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   private PurchaseRequestService purchaseRequestService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   private SiteService siteService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   private DocumentService documentService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   private DeliveryService deliveryService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   private CompanyService companyService;
 
   @Override
@@ -171,7 +166,7 @@ public class PurchaseOrderServiceLogic implements PurchaseOrderService {
     val dueDate = purchaseRequests.stream()
       .map(purchaseRequest -> purchaseRequest.getDueDate())
       .min(Comparator.comparing(d -> d))
-      .orElseGet(() -> OffsetDateTime.now().plusDays(1));
+      .orElseGet(() -> LocalDateTime.now().plusDays(1));
     val supplierId = purchaseRequests.stream().findAny().get().getSupplierId();
     val collectedRemark = purchaseRequests.stream()
       .map(purchaseRequest -> Optional.ofNullable(purchaseRequest.getRemark()).orElse(""))

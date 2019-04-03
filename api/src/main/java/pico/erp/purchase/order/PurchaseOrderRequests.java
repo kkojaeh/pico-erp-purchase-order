@@ -1,6 +1,6 @@
 package pico.erp.purchase.order;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Future;
@@ -30,7 +30,7 @@ public interface PurchaseOrderRequests {
 
     @Future
     @NotNull
-    OffsetDateTime dueDate;
+    LocalDateTime dueDate;
 
     @Valid
     @NotNull
@@ -64,7 +64,7 @@ public interface PurchaseOrderRequests {
 
     @Future
     @NotNull
-    OffsetDateTime dueDate;
+    LocalDateTime dueDate;
 
     @Valid
     @NotNull

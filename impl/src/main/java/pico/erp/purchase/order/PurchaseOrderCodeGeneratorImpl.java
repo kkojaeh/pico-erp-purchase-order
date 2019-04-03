@@ -1,7 +1,7 @@
 package pico.erp.purchase.order;
 
+import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -16,7 +16,7 @@ public class PurchaseOrderCodeGeneratorImpl implements PurchaseOrderCodeGenerato
 
   @Override
   public PurchaseOrderCode generate(PurchaseOrder purchaseOrder) {
-    val now = OffsetDateTime.now();
+    val now = LocalDateTime.now();
     val begin = now.with(LocalTime.MIN);
     val end = now.with(LocalTime.MAX);
     val count = purchaseOrderRepository.countCreatedBetween(begin, end);

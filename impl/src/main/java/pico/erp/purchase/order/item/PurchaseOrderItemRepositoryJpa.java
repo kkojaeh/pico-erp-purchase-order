@@ -23,7 +23,7 @@ interface PurchaseOrderItemEntityRepository extends
   Stream<PurchaseOrderItemEntity> findAllBy(@Param("orderId") PurchaseOrderId orderId);
 
   @Query("SELECT i FROM PurchaseOrderItem i WHERE i.requestId = :requestId")
-  PurchaseOrderItemEntity findBy(@Param("requestId") PurchaseRequestId requestId);
+  Optional<PurchaseOrderItemEntity> findBy(@Param("requestId") PurchaseRequestId requestId);
 
 }
 
@@ -46,12 +46,12 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
 
   @Override
   public void deleteBy(PurchaseOrderItemId id) {
-    repository.delete(id);
+    repository.deleteById(id);
   }
 
   @Override
   public boolean exists(PurchaseOrderItemId id) {
-    return repository.exists(id);
+    return repository.existsById(id);
   }
 
   @Override
@@ -67,19 +67,19 @@ public class PurchaseOrderItemRepositoryJpa implements PurchaseOrderItemReposito
 
   @Override
   public Optional<PurchaseOrderItem> findBy(PurchaseOrderItemId id) {
-    return Optional.ofNullable(repository.findOne(id))
+    return repository.findById(id)
       .map(mapper::jpa);
   }
 
   @Override
   public Optional<PurchaseOrderItem> findBy(PurchaseRequestId requestId) {
-    return Optional.ofNullable(repository.findBy(requestId))
+    return repository.findBy(requestId)
       .map(mapper::jpa);
   }
 
   @Override
   public void update(PurchaseOrderItem planItem) {
-    val entity = repository.findOne(planItem.getId());
+    val entity = repository.findById(planItem.getId()).get();
     mapper.pass(mapper.jpa(planItem), entity);
     repository.save(entity);
   }

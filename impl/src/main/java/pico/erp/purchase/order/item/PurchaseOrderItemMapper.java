@@ -1,6 +1,7 @@
 package pico.erp.purchase.order.item;
 
 import java.util.Optional;
+import kkojaeh.spring.boot.component.ComponentAutowired;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -32,16 +33,13 @@ public abstract class PurchaseOrderItemMapper {
   @Autowired
   protected AuditorAware<Auditor> auditorAware;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   protected ItemService itemService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   protected ItemLotService itemLotService;
 
-  @Lazy
-  @Autowired
+  @ComponentAutowired
   protected ItemSpecService itemSpecService;
 
   @Lazy
@@ -51,13 +49,11 @@ public abstract class PurchaseOrderItemMapper {
   @Autowired
   private PurchaseOrderMapper requestMapper;
 
-  @Lazy
-  @Autowired
-  private ProjectService projectService;
-
-  @Lazy
-  @Autowired
+  @ComponentAutowired(required = false)
   protected PurchaseOrderItemUnitCostEstimator unitCostEstimator;
+
+  @ComponentAutowired
+  private ProjectService projectService;
 
   protected PurchaseOrderItemId id(PurchaseOrderItem purchaseRequestItem) {
     return purchaseRequestItem != null ? purchaseRequestItem.getId() : null;
