@@ -1,6 +1,6 @@
 package pico.erp.purchase.order;
 
-import kkojaeh.spring.boot.component.Give;
+import kkojaeh.spring.boot.component.ComponentBean;
 import kkojaeh.spring.boot.component.SpringBootComponent;
 import kkojaeh.spring.boot.component.SpringBootComponentBuilder;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import pico.erp.ComponentDefinition;
 import pico.erp.purchase.order.PurchaseOrderApi.Roles;
 import pico.erp.shared.SharedConfiguration;
 import pico.erp.shared.data.Role;
@@ -27,7 +28,7 @@ import pico.erp.shared.data.Role;
 @Import(value = {
   SharedConfiguration.class
 })
-public class PurchaseOrderApplication {
+public class PurchaseOrderApplication implements ComponentDefinition {
 
   public static void main(String[] args) {
     new SpringBootComponentBuilder()
@@ -35,14 +36,19 @@ public class PurchaseOrderApplication {
       .run(args);
   }
 
+  @Override
+  public Class<?> getComponentClass() {
+    return PurchaseOrderApplication.class;
+  }
+
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role purchaseOrderCharger() {
     return Roles.PURCHASE_ORDER_CHARGER;
   }
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   public Role purchaseOrderManager() {
     return Roles.PURCHASE_ORDER_MANAGER;
   }

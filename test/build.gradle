@@ -17,21 +17,21 @@ dependencies {
 
   compile("com.github.kkojaeh.pico-erp-shared:test:${sharedVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-user:test:${userVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-user:test:${userVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-item:test:${itemVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-item:test:${itemVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-project:test:${projectVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-project:test:${projectVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-company:test:${companyVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-company:test:${companyVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-e-document:test:${documentVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-e-document:test:${documentVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-delivery:test:${deliveryVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-delivery:test:${deliveryVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-purchase-request:test:${purchaseRequestVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-purchase-request:test:${purchaseRequestVersion}")
 
-  testCompile("com.github.kkojaeh.pico-erp-warehouse:test:${warehouseVersion}")
+  testRuntime("com.github.kkojaeh.pico-erp-warehouse:test:${warehouseVersion}")
 
 
 }

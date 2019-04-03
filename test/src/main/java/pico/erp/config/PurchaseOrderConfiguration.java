@@ -1,8 +1,8 @@
 package pico.erp.config;
 
 import java.math.BigDecimal;
-import kkojaeh.spring.boot.component.Give;
-import kkojaeh.spring.boot.component.Take;
+import kkojaeh.spring.boot.component.ComponentAutowired;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +15,7 @@ import pico.erp.purchase.order.item.PurchaseOrderItemUnitCostEstimator;
 public class PurchaseOrderConfiguration {
 
   @Bean
-  @Give
+  @ComponentBean(host = false)
   @ConditionalOnMissingBean(PurchaseOrderItemUnitCostEstimator.class)
   public PurchaseOrderItemUnitCostEstimator defaultPurchaseOrderItemUnitCostEstimator() {
     return new DefaultPurchaseOrderItemUnitCostEstimator();
@@ -24,10 +24,10 @@ public class PurchaseOrderConfiguration {
   public static class DefaultPurchaseOrderItemUnitCostEstimator implements
     PurchaseOrderItemUnitCostEstimator {
 
-    @Take
+    @ComponentAutowired
     ItemService itemService;
 
-    @Take
+    @ComponentAutowired
     ItemSpecService itemSpecService;
 
     @Override

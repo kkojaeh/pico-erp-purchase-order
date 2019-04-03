@@ -3,8 +3,8 @@ package pico.erp.purchase.order;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import kkojaeh.spring.boot.component.Give;
-import kkojaeh.spring.boot.component.Take;
+import kkojaeh.spring.boot.component.ComponentAutowired;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import pico.erp.document.DocumentService;
 import pico.erp.shared.data.ContentInputStream;
 import pico.erp.user.UserService;
 
-@Give
+@ComponentBean(host = false)
 @Component
 public class PurchaseOrderDraftDeliverySubjectDefinition implements
   DeliverySubjectDefinition<PurchaseOrderId, Object> {
@@ -31,19 +31,19 @@ public class PurchaseOrderDraftDeliverySubjectDefinition implements
   @Getter
   String name = "[purchase-order] 발주서";
 
-  @Take
+  @ComponentAutowired
   private CompanyService companyService;
 
   @Autowired
   private PurchaseOrderService purchaseOrderService;
 
-  @Take
+  @ComponentAutowired
   private UserService userService;
 
-  @Take
+  @ComponentAutowired
   private DocumentService documentService;
 
-  @Take
+  @ComponentAutowired
   private CompanyAddressService companyAddressService;
 
   @Override

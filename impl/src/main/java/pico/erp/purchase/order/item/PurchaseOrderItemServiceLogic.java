@@ -3,8 +3,8 @@ package pico.erp.purchase.order.item;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import kkojaeh.spring.boot.component.Give;
-import kkojaeh.spring.boot.component.Take;
+import kkojaeh.spring.boot.component.ComponentAutowired;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import pico.erp.shared.event.EventPublisher;
 
 @SuppressWarnings("Duplicates")
 @Service
-@Give
+@ComponentBean
 @Transactional
 @Validated
 public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
@@ -35,13 +35,13 @@ public class PurchaseOrderItemServiceLogic implements PurchaseOrderItemService {
   @Autowired
   private PurchaseOrderItemMapper mapper;
 
-  @Take
+  @ComponentAutowired
   private ItemSpecService itemSpecService;
 
-  @Take
+  @ComponentAutowired
   private ItemService itemService;
 
-  @Take
+  @ComponentAutowired
   private PurchaseRequestService purchaseRequestService;
 
   @Override

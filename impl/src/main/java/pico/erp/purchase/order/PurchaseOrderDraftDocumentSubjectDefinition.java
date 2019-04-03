@@ -4,8 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import kkojaeh.spring.boot.component.Give;
-import kkojaeh.spring.boot.component.Take;
+import kkojaeh.spring.boot.component.ComponentAutowired;
+import kkojaeh.spring.boot.component.ComponentBean;
 import lombok.Getter;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import pico.erp.item.ItemService;
 import pico.erp.purchase.order.item.PurchaseOrderItemService;
 import pico.erp.user.UserService;
 
-@Give
+@ComponentBean(host = false)
 @Component
 public class PurchaseOrderDraftDocumentSubjectDefinition implements
   DocumentSubjectDefinition<PurchaseOrderId, Object> {
@@ -35,13 +35,13 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
   @Getter
   String name = "[purchase-order] 발주서";
 
-  @Take
+  @ComponentAutowired
   private DocumentContextFactory contextFactory;
 
-  @Take
+  @ComponentAutowired
   private CompanyService companyService;
 
-  @Take
+  @ComponentAutowired
   private CompanyAddressService companyAddressService;
 
   @Autowired
@@ -50,10 +50,10 @@ public class PurchaseOrderDraftDocumentSubjectDefinition implements
   @Autowired
   private PurchaseOrderItemService purchaseOrderItemService;
 
-  @Take
+  @ComponentAutowired
   private UserService userService;
 
-  @Take
+  @ComponentAutowired
   private ItemService itemService;
 
   @Autowired
