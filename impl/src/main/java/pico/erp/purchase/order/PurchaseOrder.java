@@ -1,7 +1,7 @@
 package pico.erp.purchase.order;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Arrays;
 import javax.persistence.Id;
 import lombok.AccessLevel;
@@ -36,7 +36,7 @@ public class PurchaseOrder implements Serializable {
 
   PurchaseOrderCode code;
 
-  LocalDateTime dueDate;
+  OffsetDateTime dueDate;
 
   CompanyId supplierId;
 
@@ -48,15 +48,15 @@ public class PurchaseOrder implements Serializable {
 
   UserId chargerId;
 
-  LocalDateTime determinedDate;
+  OffsetDateTime determinedDate;
 
-  LocalDateTime receivedDate;
+  OffsetDateTime receivedDate;
 
-  LocalDateTime sentDate;
+  OffsetDateTime sentDate;
 
-  LocalDateTime rejectedDate;
+  OffsetDateTime rejectedDate;
 
-  LocalDateTime canceledDate;
+  OffsetDateTime canceledDate;
 
   PurchaseOrderStatusKind status;
 
@@ -110,7 +110,7 @@ public class PurchaseOrder implements Serializable {
     this.draftId = request.getDraftId();
     this.deliveryId = request.getDeliveryId();
     this.status = PurchaseOrderStatusKind.DETERMINED;
-    this.determinedDate = LocalDateTime.now();
+    this.determinedDate = OffsetDateTime.now();
     return new PurchaseOrderMessages.Determine.Response(
       Arrays.asList(new DeterminedEvent(this.id))
     );
@@ -122,7 +122,7 @@ public class PurchaseOrder implements Serializable {
       throw new PurchaseOrderExceptions.CannotCancelException();
     }
     this.status = PurchaseOrderStatusKind.CANCELED;
-    this.canceledDate = LocalDateTime.now();
+    this.canceledDate = OffsetDateTime.now();
     return new PurchaseOrderMessages.Cancel.Response(
       Arrays.asList(new PurchaseOrderEvents.CanceledEvent(this.id))
     );
@@ -134,7 +134,7 @@ public class PurchaseOrder implements Serializable {
       throw new PurchaseOrderExceptions.CannotReceiveException();
     }
     this.status = PurchaseOrderStatusKind.RECEIVED;
-    this.receivedDate = LocalDateTime.now();
+    this.receivedDate = OffsetDateTime.now();
     return new PurchaseOrderMessages.Receive.Response(
       Arrays.asList(new PurchaseOrderEvents.ReceivedEvent(this.id))
     );
@@ -146,7 +146,7 @@ public class PurchaseOrder implements Serializable {
       throw new PurchaseOrderExceptions.CannotSendException();
     }
     this.status = PurchaseOrderStatusKind.SENT;
-    this.sentDate = LocalDateTime.now();
+    this.sentDate = OffsetDateTime.now();
     return new PurchaseOrderMessages.Send.Response(
       Arrays.asList(new PurchaseOrderEvents.SentEvent(this.id))
     );
@@ -158,7 +158,7 @@ public class PurchaseOrder implements Serializable {
       throw new PurchaseOrderExceptions.CannotRejectException();
     }
     this.status = PurchaseOrderStatusKind.REJECTED;
-    this.rejectedDate = LocalDateTime.now();
+    this.rejectedDate = OffsetDateTime.now();
     this.rejectedReason = request.getRejectedReason();
     return new PurchaseOrderMessages.Reject.Response(
       Arrays.asList(new PurchaseOrderEvents.RejectedEvent(this.id))

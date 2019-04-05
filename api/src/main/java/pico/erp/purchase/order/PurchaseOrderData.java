@@ -1,6 +1,6 @@
 package pico.erp.purchase.order;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import lombok.Data;
 import pico.erp.company.CompanyId;
 import pico.erp.delivery.DeliveryId;
@@ -25,17 +25,17 @@ public class PurchaseOrderData {
 
   Address receiveAddress;
 
-  LocalDateTime dueDate;
+  OffsetDateTime dueDate;
 
-  LocalDateTime determinedDate;
+  OffsetDateTime determinedDate;
 
-  LocalDateTime receivedDate;
+  OffsetDateTime receivedDate;
 
-  LocalDateTime sentDate;
+  OffsetDateTime sentDate;
 
-  LocalDateTime rejectedDate;
+  OffsetDateTime rejectedDate;
 
-  LocalDateTime canceledDate;
+  OffsetDateTime canceledDate;
 
   PurchaseOrderStatusKind status;
 
